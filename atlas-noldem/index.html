@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas do Reino de Noldem (Copy)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IM+Fell+English:ital@1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --roxo:#141414; --roxo2:#2c2c2c; --vermelho:#a87d00; --vermelho2:#f2c230;
+  --ouro:#d4a514; --ouro2:#f5d35a; --tinta:#1c1c1c; --tinta2:#555049;
+  --perg:#fdfbf6; --perg2:#ede7d8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'EB Garamond',Georgia,serif; color:var(--tinta); font-size:19px; line-height:1.65;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(20,2,3,0) 40%, rgba(15,1,2,.35) 100%) fixed,
+    url('img/fundo-damasco.jpg') center/cover fixed #3a0507;
+  min-height:100vh;
+}
+/* ---------- NAV ---------- */
+nav{
+  position:sticky; top:0; z-index:10;
+  background:linear-gradient(180deg,#151515,#0b0b0b);
+  border-bottom:2px solid var(--ouro);
+  box-shadow:0 4px 18px rgba(0,0,0,.5);
+}
+.nav-inner{max-width:1180px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:8px 12px;scrollbar-width:thin;scrollbar-color:var(--ouro) transparent}
+nav a{
+  flex:0 0 auto; text-decoration:none; color:#f0f0f0;
+  font-family:'Cinzel',serif; font-size:13px; letter-spacing:.06em;
+  padding:8px 13px; border:1px solid transparent; border-radius:3px; white-space:nowrap;
+  transition:.2s;
+}
+nav a .num{color:#fff;font-weight:700;margin-right:5px}
+nav a:hover{border-color:rgba(242,194,48,.5);background:rgba(242,194,48,.08)}
+nav a.ativo{background:var(--vermelho2);color:#111;border-color:var(--ouro2);font-weight:700}
+nav a.ativo .num{color:#111}
+nav a.vazio{opacity:.55}
+
+/* ---------- PÁGINA DE PERGAMINHO ---------- */
+main{max-width:980px;margin:72px auto 60px;padding:0 16px;position:relative;perspective:2600px}
+.pagina{display:none}
+.pagina.ativa{display:block}
+/* ---------- VIRAR A PÁGINA ---------- */
+.pagina.virando{display:block;position:absolute;top:0;left:16px;right:16px;z-index:30;transform-origin:left center;backface-visibility:hidden;will-change:transform;pointer-events:none}
+/* capa: dura, como papelão */
+.pagina.virando.sai.dura{animation:virarFrente .85s cubic-bezier(.5,.05,.35,1) both}
+.pagina.virando.entra.dura{animation:virarVolta .85s cubic-bezier(.5,.05,.35,1) both}
+/* folhas: maleáveis, como papel */
+.pagina.virando.sai.mole{animation:folhaFrente .95s cubic-bezier(.45,.1,.35,1) both}
+.pagina.virando.entra.mole{animation:folhaVolta .95s cubic-bezier(.45,.1,.35,1) both}
+.pagina.virando.mole::after{background:linear-gradient(90deg,rgba(0,0,0,.18) 0%,rgba(255,255,255,0) 28%,rgba(255,255,255,.35) 56%,rgba(0,0,0,.25) 78%,rgba(0,0,0,.5) 100%);animation-name:escurece}
+.pagina.virando.entra.mole::after{animation-name:clareia}
+@keyframes folhaFrente{
+  0%{transform:rotateY(0) skewY(0) scaleX(1)}
+  25%{transform:rotateY(-24deg) skewY(-3.5deg) scaleX(.97)}
+  50%{transform:rotateY(-60deg) skewY(-5.5deg) scaleX(.94)}
+  75%{transform:rotateY(-92deg) skewY(-3deg) scaleX(.97)}
+  100%{transform:rotateY(-118deg) skewY(0) scaleX(1)}}
+@keyframes folhaVolta{
+  0%{transform:rotateY(-118deg) skewY(0) scaleX(1)}
+  25%{transform:rotateY(-92deg) skewY(3deg) scaleX(.97)}
+  50%{transform:rotateY(-58deg) skewY(5.5deg) scaleX(.94)}
+  75%{transform:rotateY(-24deg) skewY(2.5deg) scaleX(.97)}
+  100%{transform:rotateY(0) skewY(0) scaleX(1)}}
+/* folhas que passam rápido quando se pula várias páginas */
+.folha{position:absolute;top:0;left:16px;right:16px;border-radius:4px;transform-origin:left center;backface-visibility:hidden;pointer-events:none;
+  background:repeating-linear-gradient(180deg,transparent 0 24px,rgba(60,50,30,.11) 24px 26px) 72px 150px/calc(100% - 144px) calc(100% - 230px) no-repeat,
+    radial-gradient(ellipse at 50% 50%,var(--perg) 40%,var(--perg2) 100%);
+  box-shadow:inset 26px 0 34px -22px rgba(0,0,0,.45),inset 0 0 60px rgba(120,100,50,.2),0 6px 16px rgba(0,0,0,.3);will-change:transform}
+.folha::before{content:"";position:absolute;inset:16px;border:2px solid var(--ouro);border-radius:2px}
+.folha::after{content:"";position:absolute;inset:0;border-radius:4px;background:linear-gradient(90deg,rgba(0,0,0,.15),rgba(255,255,255,0) 30%,rgba(255,255,255,.3) 58%,rgba(0,0,0,.35))}
+.folha.sai{animation:folhaFrente .75s cubic-bezier(.4,.1,.3,1) both}
+.folha.entra{animation:folhaVolta .75s cubic-bezier(.4,.1,.3,1) both}
+/* botão do sumário */
+.btn-sumario{position:fixed;top:16px;left:16px;z-index:40;display:flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid var(--ouro);border-radius:30px;
+  background:rgba(14,14,14,.9);color:var(--ouro2);font-family:'Cinzel',serif;font-size:13px;letter-spacing:.12em;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.4);transition:.25s}
+.btn-sumario svg{width:17px;height:17px}
+.btn-sumario:hover{background:var(--vermelho2);color:#111}
+.btn-sumario.oculto{opacity:0;pointer-events:none;transform:translateY(-8px)}
+/* página do sumário */
+.sum-lista{margin:26px auto 0;max-width:700px}
+.sum-lista a{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--tinta);padding:13px 8px;border-bottom:1px solid rgba(212,165,20,.4);border-radius:3px;transition:background .2s,padding .2s}
+.sum-lista a:hover{background:rgba(242,194,48,.16);padding-left:16px}
+.sum-lista .n{font-family:'Cinzel',serif;font-weight:700;color:var(--vermelho);width:46px;flex:none;font-size:18px}
+.sum-lista .t{font-family:'Cinzel',serif;font-weight:700;font-size:19px;color:var(--roxo);line-height:1.3}
+.sum-lista .t small{display:block;font-family:'EB Garamond',serif;font-weight:400;font-style:italic;font-size:16px;color:var(--tinta2);letter-spacing:0;margin-top:2px}
+.sum-lista .lead{flex:1;min-width:16px;border-bottom:2px dotted rgba(20,20,20,.28);align-self:center}
+.sum-lista .st{flex:none;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta2);border:1px solid rgba(85,80,73,.4);padding:2px 9px;border-radius:20px}
+.sum-lista .pg{flex:none;font-family:'Cinzel',serif;font-weight:700;color:var(--roxo);width:26px;text-align:right}
+.sum-lista a.selado .t{opacity:.62}
+@media (max-width:600px){.sum-lista .lead{display:none}.sum-lista .t{flex:1;font-size:17px}.sum-lista .n{width:34px}}
+@keyframes virarFrente{0%{transform:rotateY(0)}100%{transform:rotateY(-110deg)}}
+@keyframes virarVolta{0%{transform:rotateY(-110deg)}100%{transform:rotateY(0)}}
+/* desempenho: só a parte visível da folha vira, sem textura nem filtros pesados */
+.pagina{position:relative}
+.pagina.virando{max-height:100vh;overflow:hidden;border-radius:4px}
+.pagina.virando .perg::after{display:none}
+.pagina.virando::after{content:"";position:absolute;inset:0;border-radius:4px;pointer-events:none;z-index:9;
+  background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,.55));opacity:0;animation:escurece .9s ease both;animation-delay:inherit}
+.pagina.virando.entra::after{animation-name:clareia}
+@keyframes escurece{0%{opacity:0}100%{opacity:1}}
+@keyframes clareia{0%{opacity:1}100%{opacity:0}}
+/* sombra que some na página de baixo */
+.pagina.sombreada::before{content:"";position:absolute;inset:0 0 auto 0;height:100vh;z-index:5;pointer-events:none;border-radius:4px;
+  background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,.15));animation:clareia .9s ease both}
+/* setas laterais */
+.seta{position:fixed;top:50%;transform:translateY(-50%);z-index:20;width:54px;height:54px;border-radius:50%;
+  border:2px solid var(--ouro);background:rgba(14,14,14,.88);color:var(--ouro2);cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 6px 20px rgba(0,0,0,.55);transition:background .2s,color .2s,opacity .2s,transform .2s}
+.seta svg{width:24px;height:24px}
+.seta:hover{background:var(--vermelho2);color:#111}
+.seta:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.seta.esq{left:max(12px,calc(50% - 566px))}
+.seta.dir{right:max(12px,calc(50% - 566px))}
+.seta[disabled]{opacity:.2;pointer-events:none}
+.folio{text-align:center;font-family:'Cinzel',serif;color:var(--tinta2);font-size:13px;letter-spacing:.3em;margin-top:26px}
+@media (max-width:1140px){
+  .seta{top:auto;bottom:16px;transform:none;width:50px;height:50px}
+  .seta.esq{left:16px}.seta.dir{right:16px}
+  main{margin-bottom:96px}
+}
+@media (prefers-reduced-motion:reduce){.pagina.virando{animation:none!important}.folha{display:none}}
+.perg{
+  position:relative; padding:64px 72px 56px;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(255,255,255,.8), transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(140,120,70,.14), transparent 60%),
+    radial-gradient(ellipse at 50% 50%, var(--perg) 40%, var(--perg2) 100%);
+  border-radius:4px;
+  box-shadow: inset 26px 0 34px -22px rgba(0,0,0,.45), inset 0 0 80px rgba(120,100,50,.22), inset 0 0 10px rgba(80,70,40,.25), 3px 2px 0 -1px #e8e1cf, 6px 4px 0 -2px #d9d0b9, 9px 6px 0 -3px #c9bfa5, 0 18px 50px rgba(0,0,0,.6);
+}
+.perg::before{ /* moldura dupla */
+  content:""; position:absolute; inset:16px; border:2px solid var(--ouro); outline:1px solid rgba(20,20,20,.6); outline-offset:5px; pointer-events:none; border-radius:2px;
+}
+.perg::after{ /* textura */
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.16; mix-blend-mode:multiply; border-radius:4px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .4  0 0 0 0 .36  0 0 0 0 .28  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.canto{position:absolute;width:54px;height:54px;color:var(--ouro);z-index:1}
+.canto.tl{top:8px;left:8px}.canto.tr{top:8px;right:8px;transform:scaleX(-1)}
+.canto.bl{bottom:8px;left:8px;transform:scaleY(-1)}.canto.br{bottom:8px;right:8px;transform:scale(-1)}
+.perg > *:not(.canto){position:relative;z-index:2}
+
+/* ---------- TIPOGRAFIA ---------- */
+.cap-rotulo{font-family:'Cinzel',serif;letter-spacing:.35em;color:var(--vermelho);font-size:14px;text-align:center;text-transform:uppercase}
+h1.cap{font-family:'Cinzel Decorative',serif;font-weight:900;color:var(--roxo);text-align:center;font-size:44px;line-height:1.15;margin:6px 0 4px}
+.subtitulo{font-family:'IM Fell English',serif;font-style:italic;text-align:center;color:var(--tinta2);font-size:21px}
+h2{font-family:'Cinzel',serif;font-weight:700;color:var(--roxo);font-size:24px;margin:38px 0 10px;letter-spacing:.03em}
+h2 .rn{color:var(--vermelho);margin-right:8px}
+p{margin:0 0 14px;text-align:justify;hyphens:auto}
+p.capitular::first-letter{
+  font-family:'Cinzel Decorative',serif;font-weight:900;float:left;font-size:78px;line-height:.82;
+  padding:6px 12px 0 0;color:var(--roxo);text-shadow:3px 3px 0 var(--vermelho2);
+}
+strong{color:var(--roxo);font-weight:700;background:linear-gradient(transparent 62%,rgba(242,194,48,.45) 62%)}
+.ornamento{display:block;margin:22px auto;width:260px;max-width:70%;color:var(--ouro)}
+.destaque{
+  font-family:'IM Fell English',serif;font-style:italic;font-size:23px;text-align:center;color:var(--roxo);
+  margin:26px auto;max-width:620px;line-height:1.45
+}
+.duas-col{columns:2;column-gap:38px;column-rule:1px solid rgba(212,165,20,.5)}
+.duas-col p{break-inside:avoid-column}
+
+/* Caixas */
+.caixa{
+  margin:24px 0;padding:18px 22px 16px;border-left:5px solid var(--roxo);
+  background:linear-gradient(90deg,rgba(20,20,20,.07),rgba(20,20,20,.015));
+  border-radius:0 4px 4px 0;
+}
+.caixa .tit{font-family:'Cinzel',serif;font-weight:700;color:var(--roxo);font-size:15px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.caixa p{margin-bottom:6px}
+.caixa.ouro{border-left-color:var(--vermelho2);background:linear-gradient(90deg,rgba(242,194,48,.25),rgba(242,194,48,.05))}
+.caixa.pendente{border-left-color:var(--tinta2);background:repeating-linear-gradient(135deg,rgba(90,61,43,.07) 0 10px,rgba(90,61,43,.02) 10px 20px)}
+.caixa.pendente .tit{color:var(--tinta2)}
+.caixa ul{margin:6px 0 4px 22px}
+.caixa li{margin-bottom:4px}
+
+/* Tabela */
+table{width:100%;border-collapse:collapse;margin:20px 0 24px;font-size:18px}
+th{font-family:'Cinzel',serif;font-size:14px;letter-spacing:.1em;color:var(--vermelho2);background:var(--roxo);padding:10px 14px;text-align:left;border:1px solid var(--ouro)}
+td{padding:9px 14px;border:1px solid rgba(212,165,20,.55)}
+tr:nth-child(even) td{background:rgba(242,194,48,.1)}
+td:last-child{color:var(--roxo);font-weight:600}
+
+/* Linha do tempo */
+.tempo{position:relative;margin:24px 0 10px 8px;padding-left:30px;border-left:2px solid var(--ouro)}
+.marco{position:relative;margin-bottom:22px}
+.marco::before{content:"";position:absolute;left:-39px;top:6px;width:14px;height:14px;background:var(--vermelho2);border:2px solid var(--roxo);transform:rotate(45deg)}
+.marco .t{font-family:'Cinzel',serif;font-weight:700;color:var(--roxo);font-size:17px}
+.marco p{margin:2px 0 0}
+
+/* ---------- CAPA ---------- */
+.capa{text-align:center;padding:80px 60px 70px;
+  background:
+    radial-gradient(ellipse at 50% 35%, #262626, #050505 72%);
+  color:#f5f5f5;
+}
+.capa::before{border-color:var(--ouro2);outline-color:var(--vermelho2)}
+.capa::after{opacity:.08;mix-blend-mode:screen}
+.capa .sobre{font-family:'Cinzel',serif;letter-spacing:.5em;font-size:14px;color:var(--ouro2)}
+.capa h1{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:68px;line-height:1.02;margin:14px 0 6px;
+  background:linear-gradient(180deg,#fff6c4 8%,#f2c230 55%,#b38600);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 3px 0 rgba(0,0,0,.45))}
+.capa .linha{font-family:'IM Fell English',serif;font-style:italic;font-size:24px;color:#ffffff}
+.capa .emblema{width:190px;margin:30px auto 24px;display:block}
+.capa .rodape{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.25em;color:var(--ouro2);margin-top:18px}
+.capa .faixa{display:inline-block;margin-top:26px;padding:10px 26px;background:var(--vermelho2);border:1px solid #fff;font-family:'Cinzel',serif;font-weight:700;letter-spacing:.2em;font-size:14px;color:#111;text-decoration:none;transition:.2s}
+.capa .faixa:hover{background:#fff}
+.sumario{margin:34px auto 0;max-width:520px;text-align:left}
+.sumario a{display:flex;align-items:baseline;gap:10px;color:#eeeeee;text-decoration:none;padding:5px 0;font-size:18px;border-bottom:1px dotted rgba(245,211,90,.3)}
+.sumario a span.n{font-family:'Cinzel',serif;color:var(--ouro2);width:34px}
+.sumario a span.s{margin-left:auto;font-size:13px;font-family:'Cinzel',serif;letter-spacing:.1em;color:var(--ouro2);opacity:.8}
+.sumario a:hover{color:#fff}
+
+/* Página em construção */
+.vazio-box{text-align:center;padding:30px 10px 10px}
+.vazio-box .selo{width:110px;margin:10px auto 18px;display:block;opacity:.85}
+.vazio-box p{text-align:center}
+
+.cores{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:18px 0 10px}
+.cor{border:1px solid rgba(20,20,20,.25);border-radius:4px;overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.cor .amostra{height:86px;border-bottom:1px solid rgba(20,20,20,.2)}
+.cor.preto .amostra{background:#141414}
+.cor.amarelo .amostra{background:#f2c230}
+.cor.branco .amostra{background:conic-gradient(from 0deg,#fff 0 100%);position:relative}
+.cor.branco .amostra::after{content:"";position:absolute;inset:22px 30%;border-radius:50%;background:conic-gradient(#e94b4b,#f2c230,#4bc46a,#3f8fe8,#9a5be0,#e94b4b);opacity:.85;filter:blur(.3px)}
+.cor .nome{font-family:'Cinzel',serif;font-weight:700;font-size:18px;padding:12px 14px 0}
+.cor .quem{font-family:'IM Fell English',serif;font-style:italic;color:var(--vermelho);padding:0 14px 4px}
+.cor p{font-size:16.5px;padding:0 14px 12px;text-align:left;margin:0}
+@media (max-width:720px){.cores{grid-template-columns:1fr}}
+.retrato{margin:26px 0 30px;border:2px solid var(--ouro);outline:1px solid var(--roxo);outline-offset:4px;background:#111;position:relative}
+.retrato img{display:block;width:100%;height:auto}
+.retrato figcaption{background:var(--roxo);color:#fff;font-family:'IM Fell English',serif;font-style:italic;font-size:17px;padding:10px 16px;text-align:center;border-top:2px solid var(--ouro)}
+.retrato figcaption b{font-family:'Cinzel',serif;font-style:normal;color:var(--vermelho2);letter-spacing:.08em;margin-right:6px}
+.retrato.quadrado{max-width:520px;margin-left:auto;margin-right:auto;background:#fff}
+.ficha{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:8px 0 4px}
+.ficha dt{font-family:'Cinzel',serif;font-weight:700;font-size:14px;letter-spacing:.08em;color:var(--vermelho);text-transform:uppercase;padding-top:3px}
+.ficha dd{margin:0}
+.brasao{display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:center;margin:14px 0 6px}
+.brasao svg{width:100%;height:auto;filter:drop-shadow(0 6px 10px rgba(0,0,0,.25))}
+@media (max-width:720px){.brasao{grid-template-columns:1fr}.brasao svg{max-width:200px;margin:0 auto;display:block}}
+.lema{margin:16px auto 22px;max-width:600px;text-align:center;background:#141414;border:2px solid var(--vermelho2);outline:1px solid #141414;outline-offset:4px;padding:26px 20px 20px}
+.lema-txt{font-family:'Cinzel Decorative',serif;font-weight:700;color:var(--vermelho2);font-size:28px;line-height:1.3}
+.lema-sub{font-family:'Cinzel',serif;color:#fff;letter-spacing:.3em;font-size:12px;margin-top:10px;text-transform:uppercase}
+@media (max-width:720px){.lema-txt{font-size:22px}}
+/* Navegação de rodapé */
+.passos{display:flex;justify-content:space-between;gap:12px;margin-top:40px}
+.passos a{font-family:'Cinzel',serif;font-size:14px;letter-spacing:.08em;color:var(--roxo);text-decoration:none;padding:9px 16px;border:1px solid var(--ouro);border-radius:3px;background:rgba(255,255,255,.6);transition:.2s}
+.passos a:hover{background:var(--roxo);color:var(--vermelho2)}
+.passos .sp{flex:1}
+
+@media (max-width:720px){
+  body{font-size:17.5px}
+  .perg{padding:50px 30px 40px}
+  .canto{width:38px;height:38px}
+  h1.cap{font-size:32px}
+  .capa{padding:64px 26px 50px}
+  .capa h1{font-size:44px}
+  .duas-col{columns:1}
+  p.capitular::first-letter{font-size:62px}
+}
+</style>
+<style>
+/* ================= LIVRO: folhas do mesmo tamanho ================= */
+:root{--w:760px;--h:900px}
+body{min-height:0}
+html{scroll-behavior:auto}
+main{width:var(--w);height:var(--h);max-width:none;padding:0;margin:64px auto 40px}
+.pagina .perg{height:var(--h);display:flex;flex-direction:column;padding:52px 60px 22px}
+.pagina .perg.capa{padding:56px 48px 22px}
+.corpo{flex:1;min-height:0;overflow:hidden}
+.corpo > :first-child{margin-top:0}
+.capa .corpo{display:flex;flex-direction:column;justify-content:center;align-items:center}
+.cabeco{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.25em;text-transform:uppercase;color:var(--tinta2);text-align:center;
+  padding-bottom:8px;margin-bottom:18px;border-bottom:1px solid rgba(212,165,20,.45)}
+.folio{margin-top:10px;min-height:20px}
+.capa .folio{display:none}
+p.quebra:not(.destaque){text-align-last:justify}
+.retrato img{width:auto;height:auto;max-width:100%;max-height:calc(var(--h) * .46);margin:0 auto}
+.sum-lista a{padding:7px 8px}
+.sum-lista .t{font-size:17.5px}
+.sum-lista .t small{font-size:15px}
+/* todas as viradas iguais à da capa */
+.pagina.virando{left:0;right:0;max-height:none}
+.pagina.virando.sai{animation:virarFrente .85s cubic-bezier(.5,.05,.35,1) both}
+.pagina.virando.entra{animation:virarVolta .85s cubic-bezier(.5,.05,.35,1) both}
+.pagina.sombreada::before{inset:0;height:auto}
+.folha{left:0;right:0;height:var(--h)}
+.folha.sai{animation:virarFrente .6s cubic-bezier(.5,.05,.35,1) both}
+.folha.entra{animation:virarVolta .6s cubic-bezier(.5,.05,.35,1) both}
+.folha::after{display:none}
+.seta.esq{left:max(12px,calc(50% - var(--w) / 2 - 80px))}
+.seta.dir{right:max(12px,calc(50% - var(--w) / 2 - 80px))}
+@media (max-width:1140px){
+  .seta{top:50%;bottom:auto;transform:translateY(-50%);width:54px;height:54px}
+  main{margin-bottom:40px}
+}
+@media (max-width:920px){
+  .seta{top:auto;bottom:14px;transform:none;width:50px;height:50px}
+  .seta.esq{left:16px}.seta.dir{right:16px}
+  main{margin-bottom:90px}
+}
+@media (max-width:720px){
+  .pagina .perg{padding:42px 26px 18px}
+  .pagina .perg.capa{padding:44px 22px 18px}
+  .capa .emblema{width:130px;margin:18px auto 14px}
+}
+</style>
+<style>
+/* ================= JANELINHA DO SUMÁRIO ================= */
+.janela{position:fixed;z-index:60;top:70px;left:16px;width:320px;height:420px;min-width:200px;min-height:180px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);
+  display:flex;flex-direction:column;resize:both;overflow:hidden;border-radius:8px;border:2px solid var(--ouro);
+  background:radial-gradient(ellipse at 50% 30%,var(--perg) 40%,var(--perg2) 100%);box-shadow:0 18px 50px rgba(0,0,0,.55);
+  transition:opacity .2s,transform .2s}
+.janela.fechada{opacity:0;transform:scale(.96);pointer-events:none}
+.janela .barra{flex:none;display:flex;align-items:center;gap:8px;padding:8px 8px 8px 14px;background:#141414;color:var(--ouro2);
+  cursor:grab;user-select:none;touch-action:none;border-bottom:2px solid var(--ouro)}
+.janela .barra:active{cursor:grabbing}
+.janela .barra .tt{flex:1;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase}
+.janela .barra .pega{opacity:.6;font-size:15px;letter-spacing:-2px}
+.janela .fechar{width:28px;height:28px;border-radius:50%;border:1px solid rgba(245,211,90,.5);background:transparent;color:var(--ouro2);cursor:pointer;font-size:16px;line-height:1}
+.janela .fechar:hover{background:var(--vermelho2);color:#111}
+.janela .itens{flex:1;overflow:auto;container-type:inline-size;padding:6px 0 10px}
+.janela .itens a{display:flex;align-items:baseline;gap:.7em;padding:.5em 1em;text-decoration:none;color:var(--tinta);
+  font-family:'Cinzel',serif;font-weight:700;font-size:clamp(12px,5.2cqw,30px);line-height:1.25;border-bottom:1px solid rgba(212,165,20,.3);transition:background .15s}
+.janela .itens a:hover{background:rgba(242,194,48,.18)}
+.janela .itens a.atual{background:var(--vermelho2);color:#111}
+.janela .itens a .n{color:var(--vermelho);min-width:2.2em;flex:none}
+.janela .itens a.atual .n{color:#111}
+.janela .itens a.selado{opacity:.6}
+.janela .itens a .pg{margin-left:auto;font-weight:500;opacity:.7;font-size:.8em}
+.btn-sumario{cursor:pointer}
+.btn-sumario.aberto{background:var(--vermelho2);color:#111}
+</style>
+<style>
+/* ================= GRAVURAS NO FUNDO ================= */
+.gravuras{display:none}
+.gravuras svg{width:100%;height:100%}
+/* ================= PENA, BORRACHA E CADERNO ================= */
+.ferramentas{position:fixed;top:16px;right:16px;z-index:45;display:flex;flex-direction:column;gap:10px}
+.ico{width:52px;height:52px;border-radius:50%;border:2px solid var(--ouro);background:rgba(14,14,14,.9);color:var(--ouro2);cursor:pointer;
+  display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.5);transition:background .2s,color .2s,transform .15s}
+.ico svg{width:30px;height:30px}
+.ico:hover{transform:scale(1.06)}
+.ico.ligado{background:var(--vermelho2);color:#111}
+.paleta{position:absolute;top:0;right:64px;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:30px;border:1px solid var(--ouro);
+  background:rgba(14,14,14,.92);box-shadow:0 6px 18px rgba(0,0,0,.5);flex-wrap:nowrap}
+.paleta[hidden]{display:none}
+.paleta .sep{width:1px;height:24px;background:rgba(245,211,90,.35)}
+.paleta button{width:34px;height:34px;border-radius:50%;border:2px solid transparent;background:transparent;color:var(--ouro2);cursor:pointer;display:grid;place-items:center}
+.paleta button svg{width:20px;height:20px}
+.paleta button:hover{background:rgba(242,194,48,.15)}
+.paleta button.sel{border-color:var(--ouro2);background:rgba(242,194,48,.22)}
+.paleta .cor i{display:block;width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,.5)}
+.paleta .esp i{display:block;border-radius:50%;background:var(--ouro2)}
+.tela-anot{position:absolute;inset:0;width:100%;height:100%;z-index:35;pointer-events:none;touch-action:none;transition:opacity .15s}
+body.caneta-on .tela-anot{pointer-events:auto;cursor:none}
+.tela-anot.oculta{opacity:0}
+.ponto{position:fixed;z-index:70;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);border:1.5px solid rgba(255,255,255,.9);
+  box-shadow:0 0 0 1px rgba(0,0,0,.6);display:none}
+body.caneta-on .ponto.visivel{display:block}
+/* caderno medieval */
+.caderno{position:fixed;z-index:62;top:150px;right:84px;width:360px;height:440px;min-width:240px;min-height:220px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);
+  display:flex;flex-direction:column;resize:both;overflow:hidden;border-radius:6px 10px 10px 6px;
+  border:3px solid #4a0e0e;box-shadow:inset 6px 0 0 #2a0606,0 18px 50px rgba(0,0,0,.6);background:#5a1212;transition:opacity .2s,transform .2s}
+.caderno.fechada{opacity:0;transform:scale(.96);pointer-events:none}
+.caderno .barra{flex:none;display:flex;align-items:center;gap:8px;padding:8px 8px 8px 16px;cursor:grab;user-select:none;touch-action:none;
+  background:linear-gradient(180deg,#6e1717,#4a0e0e);color:#f5d35a;border-bottom:2px solid var(--ouro)}
+.caderno .barra .tt{flex:1;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase}
+.caderno .fechar{width:28px;height:28px;border-radius:50%;border:1px solid rgba(245,211,90,.5);background:transparent;color:#f5d35a;cursor:pointer;font-size:16px}
+.caderno .fechar:hover{background:var(--vermelho2);color:#111}
+.caderno .folha-c{flex:1;margin:10px 10px 10px 16px;border-radius:2px;position:relative;
+  background:radial-gradient(ellipse at 30% 20%,#fbf4e2,#eadcb8 100%);box-shadow:inset 0 0 40px rgba(120,90,40,.35)}
+.caderno .folha-c::before{content:"";position:absolute;top:0;bottom:0;left:38px;border-left:1.5px solid rgba(164,22,26,.45)}
+.caderno textarea{position:absolute;inset:0;width:100%;height:100%;border:0;outline:0;resize:none;background:transparent;
+  padding:14px 16px 14px 50px;font-family:'IM Fell English',serif;font-style:italic;font-size:20px;line-height:32px;color:#2b1a0e;
+  background-image:repeating-linear-gradient(180deg,transparent 0 31px,rgba(110,80,40,.22) 31px 32px);background-position:0 13px;background-attachment:local}
+.caderno textarea::placeholder{color:rgba(80,55,30,.45)}
+.caderno .rodape-c{flex:none;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.15em;color:rgba(245,211,90,.75);padding:0 16px 8px;text-transform:uppercase}
+@media (max-width:920px){.ico{width:46px;height:46px}.ico svg{width:26px;height:26px}.paleta{flex-wrap:wrap;width:max-content;max-width:calc(100vw - 100px)}}
+</style>
+<style>
+/* ================= CAPA DOURADA EM RELEVO ================= */
+.pagina .perg.capa{container-type:size;color:#3b2412;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.011' numOctaves='4' seed='3'/><feColorMatrix values='0 0 0 0 .18  0 0 0 0 .1  0 0 0 0 .04  0 0 0 -1.5 1.05'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>") center/cover,linear-gradient(135deg,#5c3a1a 0%,#9a6e38 22%,#7a5128 42%,#a97e45 62%,#6e4a24 82%,#3f2810 100%);
+  box-shadow:inset 0 0 60px rgba(40,20,5,.7),inset 0 0 8px rgba(30,15,0,.8),3px 2px 0 -1px #e8e1cf,6px 4px 0 -2px #d9d0b9,0 18px 50px rgba(0,0,0,.6)}
+.perg.capa::before{display:none}
+.perg.capa::after{opacity:.5;mix-blend-mode:multiply}
+.capa .canto{display:none}
+.perg.capa > .moldura-capa{position:absolute;inset:0;z-index:1;pointer-events:none}
+.moldura-capa svg{position:absolute;inset:0;width:100%;height:100%}
+.capa .corpo > *{max-width:58cqw}
+.capa .sobre{color:#5a3a1c;font-size:clamp(9px,1.7cqw,13px);letter-spacing:.35em;text-shadow:0 1px 0 rgba(245,225,185,.6)}
+.capa h1{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#3b2412;-webkit-text-fill-color:#3b2412;filter:none;
+  font-size:clamp(30px,7.2cqw,56px);text-shadow:0 1px 0 rgba(245,225,185,.85),0 -1px 0 rgba(70,45,0,.45),0 2px 3px rgba(70,45,0,.25)}
+.capa .linha{color:#4a2e16;font-size:clamp(15px,2.8cqw,21px);text-shadow:0 1px 0 rgba(245,225,185,.6)}
+.capa .emblema{width:clamp(130px,28cqw,215px);max-width:none;height:auto;margin:clamp(10px,2.5cqh,22px) auto;filter:drop-shadow(0 1px 0 rgba(245,225,185,.6))}
+
+
+
+
+.capa .rodape{color:#5a3a1c;font-size:clamp(9px,1.6cqw,12px);margin-top:6px;text-shadow:0 1px 0 rgba(245,225,185,.6)}
+.capa .faixa{margin-top:clamp(12px,3cqh,24px);background:#3b2412;color:#e8c98e;border:1px solid #c9a06a;box-shadow:0 2px 0 rgba(245,225,185,.5),0 4px 10px rgba(60,35,0,.35)}
+.capa .faixa:hover{background:#141414;color:#fff}
+.capa .faixa{white-space:nowrap;padding:10px clamp(14px,4cqw,26px);letter-spacing:clamp(.1em,.4cqw,.2em)}
+</style>
+<style>
+/* ================= CAPA EM IMAGEM ================= */
+.pagina .perg.capa{padding:0;background:url('img/capa-noldem.jpg') 0 0/100% 100% no-repeat,url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAjABwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDhbWFrqRLe2iZp2Y5fPBGeOK6q08E3aw5a68tiNwAJOT+dVfBkCQiW6aNmck4CjJxmulH2pW2xLP5LgMCxJI9jg9smvHqVHzOKPWjFWTZxOr6BdaMPMcGSEnkg5/8A1VksULt5QKx5+VS2SB7mvRbmB7i1minhmBkBBLZ2+ueTxXnMkPkTyRkY2sce9XSqOV09yZxS1R0vg67wskO75g5GPUdq0tY1a7tr0xfvI0AHlhH25z3Pr3rj9PuXtFS7iddwYqYyeWHc/T3reh1i7ugWGsRRLv8Alje3BKegyaznD33IuMvdSOlN1M+hpJcriQplgeM+hrzOaX7Rcyy5yC5x9K3L/W7m6tGsjerOGf57jZsAX0A/r71gSgJK6KQdpxkdD7irow5btk1JXsNijRiSRz6jipHPlEhABkemaKK62cyHmGPZ93qPWqwA6YAx6UUVJXU//9k=) 0 0/100% 100% no-repeat #3a220e;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.4),3px 2px 0 -1px #e8e1cf,6px 4px 0 -2px #d9d0b9,9px 6px 0 -3px #c9bfa5,0 18px 50px rgba(0,0,0,.6)}
+.perg.capa::after{display:none}
+.capa .corpo{position:static}
+.capa .corpo > :not(.faixa){display:none}
+.capa .corpo > .faixa{position:absolute;left:32%;top:73.9%;width:35.7%;height:5.85%;border-radius:8px;max-width:none;margin:0;padding:0;
+  background:transparent;border:0;border-radius:6px;box-shadow:none;color:transparent;font-size:0;cursor:pointer;
+  transition:box-shadow .2s,background .2s}
+.capa .corpo > .faixa:hover,.capa .corpo > .faixa:focus-visible{background:rgba(255,220,150,.12);box-shadow:0 0 0 2px rgba(245,211,90,.85),0 0 22px rgba(245,190,90,.6);outline:none}
+</style>
+<link rel="preload" as="image" href="img/capa-noldem.jpg">
+<link rel="preload" as="image" href="img/fundo-damasco.jpg">
+<style>
+/* ================= CURSOR NORMAL: ADAGA ================= */
+html,body,.pagina,.perg,.corpo{
+  cursor:url('img/adaga-44.png') 1 1, auto;
+  cursor:-webkit-image-set(url('img/adaga-44.png') 1x, url('img/adaga-88.png') 2x) 1 1, auto;
+  cursor:image-set(url('img/adaga-44.png') 1x, url('img/adaga-88.png') 2x) 1 1, auto}
+button[disabled],.seta[disabled]{cursor:url('img/adaga-44.png') 1 1, default !important}
+</style>
+<style>
+/* ================= CURSOR: MANOPLA DE CAVALEIRO ================= */
+a,button,.faixa,.seta,.ico,.fechar,.btn-sumario,.paleta button,.sum-lista a,.janela .itens a,.passos a{
+  cursor:url('img/mao-44.png') 3 2, pointer !important;
+  cursor:-webkit-image-set(url('img/mao-44.png') 1x, url('img/mao-88.png') 2x) 3 2, pointer !important;
+  cursor:image-set(url('img/mao-44.png') 1x, url('img/mao-88.png') 2x) 3 2, pointer !important}
+
+</style>
+<style>
+.retrato.silhueta{max-width:400px;margin-left:auto;margin-right:auto;background:radial-gradient(ellipse at 50% 40%,#f6efe0,#e2d4b8)}
+.retrato.silhueta img{max-height:calc(var(--h) * .42)}
+.retrato.brasao-elliot{max-width:340px;background:#e9dcc0}
+.retrato.brasao-elliot img{max-height:calc(var(--h) * .34)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="canto" viewBox="0 0 60 60">
+      <path d="M4 56 V14 Q4 4 14 4 H56" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M10 56 V18 Q10 10 18 10 H56" fill="none" stroke="currentColor" stroke-width="1"/>
+      <path d="M4 4 m6 6 q8 0 10 8 q-8 -2 -10 -8z M10 10 q0 8 8 10 q-2 -8 -8 -10z" fill="#141414"/>
+      <circle cx="10" cy="10" r="3" fill="currentColor"/>
+    </symbol>
+    <symbol id="orn" viewBox="0 0 260 24">
+      <path d="M0 12 H100 M160 12 H260" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M104 12 q13 -11 26 0 q13 11 26 0 q-13 -11 -26 0 q-13 11 -26 0z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <rect x="125" y="7" width="10" height="10" transform="rotate(45 130 12)" fill="#141414"/>
+      <circle cx="96" cy="12" r="2.4" fill="currentColor"/><circle cx="164" cy="12" r="2.4" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="btn-sumario oculto" id="btnSum" href="#sumario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4z"/><path d="M20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg>Sumário</a>
+<button class="seta esq" id="setaEsq" aria-label="Página anterior" title="Página anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+<button class="seta dir" id="setaDir" aria-label="Virar a página" title="Virar a página"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+
+<main id="conteudo">
+
+<!-- ================= CAPA ================= -->
+<section class="pagina" id="capa">
+  <div class="perg capa">
+    <svg class="canto tl"><use href="#canto"/></svg><svg class="canto tr"><use href="#canto"/></svg>
+    <svg class="canto bl"><use href="#canto"/></svg><svg class="canto br"><use href="#canto"/></svg>
+    <div class="sobre">TORMENTA20 · SUPLEMENTO DE CENÁRIO</div>
+    <h1>Atlas do Reino<br>de Noldem</h1>
+    <div class="linha">“Um lugar para quem não tem lugar.”</div>
+    <svg class="emblema" viewBox="0 0 400 400" role="img" aria-label="Rosa dos ventos de Noldem"><defs><pattern id="bh" width="2.4" height="2.4" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><rect width="2.4" height="2.4" fill="#8a6038"/><line x1="0" y1="0" x2="0" y2="2.4" stroke="#4e2e14" stroke-width="1.4"/></pattern><pattern id="bh2" width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(-50)"><line x1="0" y1="0" x2="0" y2="2.2" stroke="#4e2e14" stroke-width=".9"/></pattern></defs><g fill="none" stroke="#4e2e14"><circle cx="200" cy="200" r="192" stroke-width="3.4"/><circle cx="200" cy="200" r="186" stroke-width="1.3"/><circle cx="200" cy="200" r="170" stroke-width="2.2"/><path d="M195.3 30.1 L200.0 23.0 L204.7 30.1Z" fill="#4e2e14" stroke="none"/><path d="M217.5 30.9 L223.1 24.5 L226.9 32.1Z" fill="#4e2e14" stroke="none"/><path d="M239.4 34.6 L245.8 29.0 L248.6 37.1Z" fill="#4e2e14" stroke="none"/><path d="M260.6 41.2 L267.7 36.5 L269.4 44.8Z" fill="#4e2e14" stroke="none"/><path d="M280.9 50.5 L288.5 46.7 L289.1 55.2Z" fill="#4e2e14" stroke="none"/><path d="M299.7 62.3 L307.8 59.6 L307.2 68.1Z" fill="#4e2e14" stroke="none"/><path d="M316.8 76.5 L325.2 74.8 L323.5 83.2Z" fill="#4e2e14" stroke="none"/><path d="M331.9 92.8 L340.4 92.2 L337.7 100.3Z" fill="#4e2e14" stroke="none"/><path d="M344.8 110.9 L353.3 111.5 L349.5 119.1Z" fill="#4e2e14" stroke="none"/><path d="M355.2 130.6 L363.5 132.3 L358.8 139.4Z" fill="#4e2e14" stroke="none"/><path d="M362.9 151.4 L371.0 154.2 L365.4 160.6Z" fill="#4e2e14" stroke="none"/><path d="M367.9 173.1 L375.5 176.9 L369.1 182.5Z" fill="#4e2e14" stroke="none"/><path d="M369.9 195.3 L377.0 200.0 L369.9 204.7Z" fill="#4e2e14" stroke="none"/><path d="M369.1 217.5 L375.5 223.1 L367.9 226.9Z" fill="#4e2e14" stroke="none"/><path d="M365.4 239.4 L371.0 245.8 L362.9 248.6Z" fill="#4e2e14" stroke="none"/><path d="M358.8 260.6 L363.5 267.7 L355.2 269.4Z" fill="#4e2e14" stroke="none"/><path d="M349.5 280.9 L353.3 288.5 L344.8 289.1Z" fill="#4e2e14" stroke="none"/><path d="M337.7 299.7 L340.4 307.8 L331.9 307.2Z" fill="#4e2e14" stroke="none"/><path d="M323.5 316.8 L325.2 325.2 L316.8 323.5Z" fill="#4e2e14" stroke="none"/><path d="M307.2 331.9 L307.8 340.4 L299.7 337.7Z" fill="#4e2e14" stroke="none"/><path d="M289.1 344.8 L288.5 353.3 L280.9 349.5Z" fill="#4e2e14" stroke="none"/><path d="M269.4 355.2 L267.7 363.5 L260.6 358.8Z" fill="#4e2e14" stroke="none"/><path d="M248.6 362.9 L245.8 371.0 L239.4 365.4Z" fill="#4e2e14" stroke="none"/><path d="M226.9 367.9 L223.1 375.5 L217.5 369.1Z" fill="#4e2e14" stroke="none"/><path d="M204.7 369.9 L200.0 377.0 L195.3 369.9Z" fill="#4e2e14" stroke="none"/><path d="M182.5 369.1 L176.9 375.5 L173.1 367.9Z" fill="#4e2e14" stroke="none"/><path d="M160.6 365.4 L154.2 371.0 L151.4 362.9Z" fill="#4e2e14" stroke="none"/><path d="M139.4 358.8 L132.3 363.5 L130.6 355.2Z" fill="#4e2e14" stroke="none"/><path d="M119.1 349.5 L111.5 353.3 L110.9 344.8Z" fill="#4e2e14" stroke="none"/><path d="M100.3 337.7 L92.2 340.4 L92.8 331.9Z" fill="#4e2e14" stroke="none"/><path d="M83.2 323.5 L74.8 325.2 L76.5 316.8Z" fill="#4e2e14" stroke="none"/><path d="M68.1 307.2 L59.6 307.8 L62.3 299.7Z" fill="#4e2e14" stroke="none"/><path d="M55.2 289.1 L46.7 288.5 L50.5 280.9Z" fill="#4e2e14" stroke="none"/><path d="M44.8 269.4 L36.5 267.7 L41.2 260.6Z" fill="#4e2e14" stroke="none"/><path d="M37.1 248.6 L29.0 245.8 L34.6 239.4Z" fill="#4e2e14" stroke="none"/><path d="M32.1 226.9 L24.5 223.1 L30.9 217.5Z" fill="#4e2e14" stroke="none"/><path d="M30.1 204.7 L23.0 200.0 L30.1 195.3Z" fill="#4e2e14" stroke="none"/><path d="M30.9 182.5 L24.5 176.9 L32.1 173.1Z" fill="#4e2e14" stroke="none"/><path d="M34.6 160.6 L29.0 154.2 L37.1 151.4Z" fill="#4e2e14" stroke="none"/><path d="M41.2 139.4 L36.5 132.3 L44.8 130.6Z" fill="#4e2e14" stroke="none"/><path d="M50.5 119.1 L46.7 111.5 L55.2 110.9Z" fill="#4e2e14" stroke="none"/><path d="M62.3 100.3 L59.6 92.2 L68.1 92.8Z" fill="#4e2e14" stroke="none"/><path d="M76.5 83.2 L74.8 74.8 L83.2 76.5Z" fill="#4e2e14" stroke="none"/><path d="M92.8 68.1 L92.2 59.6 L100.3 62.3Z" fill="#4e2e14" stroke="none"/><path d="M110.9 55.2 L111.5 46.7 L119.1 50.5Z" fill="#4e2e14" stroke="none"/><path d="M130.6 44.8 L132.3 36.5 L139.4 41.2Z" fill="#4e2e14" stroke="none"/><path d="M151.4 37.1 L154.2 29.0 L160.6 34.6Z" fill="#4e2e14" stroke="none"/><path d="M173.1 32.1 L176.9 24.5 L182.5 30.9Z" fill="#4e2e14" stroke="none"/><circle cx="200" cy="200" r="124" stroke-width=".75"/><circle cx="200" cy="200" r="127" stroke-width=".75"/><circle cx="200" cy="200" r="130" stroke-width=".75"/><circle cx="200" cy="200" r="133" stroke-width=".75"/><circle cx="200" cy="200" r="136" stroke-width=".75"/><circle cx="200" cy="200" r="139" stroke-width=".75"/><circle cx="200" cy="200" r="142" stroke-width=".75"/><circle cx="200" cy="200" r="145" stroke-width=".75"/><circle cx="200" cy="200" r="148" stroke-width=".75"/><circle cx="200" cy="200" r="151" stroke-width=".75"/><circle cx="200" cy="200" r="154" stroke-width=".75"/><circle cx="200" cy="200" r="157" stroke-width=".75"/><circle cx="200" cy="200" r="160" stroke-width=".75"/><circle cx="200" cy="200" r="163" stroke-width=".75"/><circle cx="200" cy="200" r="166" stroke-width=".75"/><circle cx="200" cy="200" r="121" stroke-width="1.8"/><line x1="200.0" y1="140.0" x2="200.0" y2="81.0" stroke-width=".7"/><line x1="203.1" y1="140.1" x2="206.2" y2="81.2" stroke-width=".7"/><line x1="206.3" y1="140.3" x2="212.4" y2="81.7" stroke-width=".7"/><line x1="209.4" y1="140.7" x2="218.6" y2="82.5" stroke-width=".7"/><line x1="212.5" y1="141.3" x2="224.7" y2="83.6" stroke-width=".7"/><line x1="215.5" y1="142.0" x2="230.8" y2="85.1" stroke-width=".7"/><line x1="218.5" y1="142.9" x2="236.8" y2="86.8" stroke-width=".7"/><line x1="221.5" y1="144.0" x2="242.6" y2="88.9" stroke-width=".7"/><line x1="224.4" y1="145.2" x2="248.4" y2="91.3" stroke-width=".7"/><line x1="227.2" y1="146.5" x2="254.0" y2="94.0" stroke-width=".7"/><line x1="230.0" y1="148.0" x2="259.5" y2="96.9" stroke-width=".7"/><line x1="232.7" y1="149.7" x2="264.8" y2="100.2" stroke-width=".7"/><line x1="235.3" y1="151.5" x2="269.9" y2="103.7" stroke-width=".7"/><line x1="237.8" y1="153.4" x2="274.9" y2="107.5" stroke-width=".7"/><line x1="240.1" y1="155.4" x2="279.6" y2="111.6" stroke-width=".7"/><line x1="242.4" y1="157.6" x2="284.1" y2="115.9" stroke-width=".7"/><line x1="244.6" y1="159.9" x2="288.4" y2="120.4" stroke-width=".7"/><line x1="246.6" y1="162.2" x2="292.5" y2="125.1" stroke-width=".7"/><line x1="248.5" y1="164.7" x2="296.3" y2="130.1" stroke-width=".7"/><line x1="250.3" y1="167.3" x2="299.8" y2="135.2" stroke-width=".7"/><line x1="252.0" y1="170.0" x2="303.1" y2="140.5" stroke-width=".7"/><line x1="253.5" y1="172.8" x2="306.0" y2="146.0" stroke-width=".7"/><line x1="254.8" y1="175.6" x2="308.7" y2="151.6" stroke-width=".7"/><line x1="256.0" y1="178.5" x2="311.1" y2="157.4" stroke-width=".7"/><line x1="257.1" y1="181.5" x2="313.2" y2="163.2" stroke-width=".7"/><line x1="258.0" y1="184.5" x2="314.9" y2="169.2" stroke-width=".7"/><line x1="258.7" y1="187.5" x2="316.4" y2="175.3" stroke-width=".7"/><line x1="259.3" y1="190.6" x2="317.5" y2="181.4" stroke-width=".7"/><line x1="259.7" y1="193.7" x2="318.3" y2="187.6" stroke-width=".7"/><line x1="259.9" y1="196.9" x2="318.8" y2="193.8" stroke-width=".7"/><line x1="260.0" y1="200.0" x2="319.0" y2="200.0" stroke-width=".7"/><line x1="259.9" y1="203.1" x2="318.8" y2="206.2" stroke-width=".7"/><line x1="259.7" y1="206.3" x2="318.3" y2="212.4" stroke-width=".7"/><line x1="259.3" y1="209.4" x2="317.5" y2="218.6" stroke-width=".7"/><line x1="258.7" y1="212.5" x2="316.4" y2="224.7" stroke-width=".7"/><line x1="258.0" y1="215.5" x2="314.9" y2="230.8" stroke-width=".7"/><line x1="257.1" y1="218.5" x2="313.2" y2="236.8" stroke-width=".7"/><line x1="256.0" y1="221.5" x2="311.1" y2="242.6" stroke-width=".7"/><line x1="254.8" y1="224.4" x2="308.7" y2="248.4" stroke-width=".7"/><line x1="253.5" y1="227.2" x2="306.0" y2="254.0" stroke-width=".7"/><line x1="252.0" y1="230.0" x2="303.1" y2="259.5" stroke-width=".7"/><line x1="250.3" y1="232.7" x2="299.8" y2="264.8" stroke-width=".7"/><line x1="248.5" y1="235.3" x2="296.3" y2="269.9" stroke-width=".7"/><line x1="246.6" y1="237.8" x2="292.5" y2="274.9" stroke-width=".7"/><line x1="244.6" y1="240.1" x2="288.4" y2="279.6" stroke-width=".7"/><line x1="242.4" y1="242.4" x2="284.1" y2="284.1" stroke-width=".7"/><line x1="240.1" y1="244.6" x2="279.6" y2="288.4" stroke-width=".7"/><line x1="237.8" y1="246.6" x2="274.9" y2="292.5" stroke-width=".7"/><line x1="235.3" y1="248.5" x2="269.9" y2="296.3" stroke-width=".7"/><line x1="232.7" y1="250.3" x2="264.8" y2="299.8" stroke-width=".7"/><line x1="230.0" y1="252.0" x2="259.5" y2="303.1" stroke-width=".7"/><line x1="227.2" y1="253.5" x2="254.0" y2="306.0" stroke-width=".7"/><line x1="224.4" y1="254.8" x2="248.4" y2="308.7" stroke-width=".7"/><line x1="221.5" y1="256.0" x2="242.6" y2="311.1" stroke-width=".7"/><line x1="218.5" y1="257.1" x2="236.8" y2="313.2" stroke-width=".7"/><line x1="215.5" y1="258.0" x2="230.8" y2="314.9" stroke-width=".7"/><line x1="212.5" y1="258.7" x2="224.7" y2="316.4" stroke-width=".7"/><line x1="209.4" y1="259.3" x2="218.6" y2="317.5" stroke-width=".7"/><line x1="206.3" y1="259.7" x2="212.4" y2="318.3" stroke-width=".7"/><line x1="203.1" y1="259.9" x2="206.2" y2="318.8" stroke-width=".7"/><line x1="200.0" y1="260.0" x2="200.0" y2="319.0" stroke-width=".7"/><line x1="196.9" y1="259.9" x2="193.8" y2="318.8" stroke-width=".7"/><line x1="193.7" y1="259.7" x2="187.6" y2="318.3" stroke-width=".7"/><line x1="190.6" y1="259.3" x2="181.4" y2="317.5" stroke-width=".7"/><line x1="187.5" y1="258.7" x2="175.3" y2="316.4" stroke-width=".7"/><line x1="184.5" y1="258.0" x2="169.2" y2="314.9" stroke-width=".7"/><line x1="181.5" y1="257.1" x2="163.2" y2="313.2" stroke-width=".7"/><line x1="178.5" y1="256.0" x2="157.4" y2="311.1" stroke-width=".7"/><line x1="175.6" y1="254.8" x2="151.6" y2="308.7" stroke-width=".7"/><line x1="172.8" y1="253.5" x2="146.0" y2="306.0" stroke-width=".7"/><line x1="170.0" y1="252.0" x2="140.5" y2="303.1" stroke-width=".7"/><line x1="167.3" y1="250.3" x2="135.2" y2="299.8" stroke-width=".7"/><line x1="164.7" y1="248.5" x2="130.1" y2="296.3" stroke-width=".7"/><line x1="162.2" y1="246.6" x2="125.1" y2="292.5" stroke-width=".7"/><line x1="159.9" y1="244.6" x2="120.4" y2="288.4" stroke-width=".7"/><line x1="157.6" y1="242.4" x2="115.9" y2="284.1" stroke-width=".7"/><line x1="155.4" y1="240.1" x2="111.6" y2="279.6" stroke-width=".7"/><line x1="153.4" y1="237.8" x2="107.5" y2="274.9" stroke-width=".7"/><line x1="151.5" y1="235.3" x2="103.7" y2="269.9" stroke-width=".7"/><line x1="149.7" y1="232.7" x2="100.2" y2="264.8" stroke-width=".7"/><line x1="148.0" y1="230.0" x2="96.9" y2="259.5" stroke-width=".7"/><line x1="146.5" y1="227.2" x2="94.0" y2="254.0" stroke-width=".7"/><line x1="145.2" y1="224.4" x2="91.3" y2="248.4" stroke-width=".7"/><line x1="144.0" y1="221.5" x2="88.9" y2="242.6" stroke-width=".7"/><line x1="142.9" y1="218.5" x2="86.8" y2="236.8" stroke-width=".7"/><line x1="142.0" y1="215.5" x2="85.1" y2="230.8" stroke-width=".7"/><line x1="141.3" y1="212.5" x2="83.6" y2="224.7" stroke-width=".7"/><line x1="140.7" y1="209.4" x2="82.5" y2="218.6" stroke-width=".7"/><line x1="140.3" y1="206.3" x2="81.7" y2="212.4" stroke-width=".7"/><line x1="140.1" y1="203.1" x2="81.2" y2="206.2" stroke-width=".7"/><line x1="140.0" y1="200.0" x2="81.0" y2="200.0" stroke-width=".7"/><line x1="140.1" y1="196.9" x2="81.2" y2="193.8" stroke-width=".7"/><line x1="140.3" y1="193.7" x2="81.7" y2="187.6" stroke-width=".7"/><line x1="140.7" y1="190.6" x2="82.5" y2="181.4" stroke-width=".7"/><line x1="141.3" y1="187.5" x2="83.6" y2="175.3" stroke-width=".7"/><line x1="142.0" y1="184.5" x2="85.1" y2="169.2" stroke-width=".7"/><line x1="142.9" y1="181.5" x2="86.8" y2="163.2" stroke-width=".7"/><line x1="144.0" y1="178.5" x2="88.9" y2="157.4" stroke-width=".7"/><line x1="145.2" y1="175.6" x2="91.3" y2="151.6" stroke-width=".7"/><line x1="146.5" y1="172.8" x2="94.0" y2="146.0" stroke-width=".7"/><line x1="148.0" y1="170.0" x2="96.9" y2="140.5" stroke-width=".7"/><line x1="149.7" y1="167.3" x2="100.2" y2="135.2" stroke-width=".7"/><line x1="151.5" y1="164.7" x2="103.7" y2="130.1" stroke-width=".7"/><line x1="153.4" y1="162.2" x2="107.5" y2="125.1" stroke-width=".7"/><line x1="155.4" y1="159.9" x2="111.6" y2="120.4" stroke-width=".7"/><line x1="157.6" y1="157.6" x2="115.9" y2="115.9" stroke-width=".7"/><line x1="159.9" y1="155.4" x2="120.4" y2="111.6" stroke-width=".7"/><line x1="162.2" y1="153.4" x2="125.1" y2="107.5" stroke-width=".7"/><line x1="164.7" y1="151.5" x2="130.1" y2="103.7" stroke-width=".7"/><line x1="167.3" y1="149.7" x2="135.2" y2="100.2" stroke-width=".7"/><line x1="170.0" y1="148.0" x2="140.5" y2="96.9" stroke-width=".7"/><line x1="172.8" y1="146.5" x2="146.0" y2="94.0" stroke-width=".7"/><line x1="175.6" y1="145.2" x2="151.6" y2="91.3" stroke-width=".7"/><line x1="178.5" y1="144.0" x2="157.4" y2="88.9" stroke-width=".7"/><line x1="181.5" y1="142.9" x2="163.2" y2="86.8" stroke-width=".7"/><line x1="184.5" y1="142.0" x2="169.2" y2="85.1" stroke-width=".7"/><line x1="187.5" y1="141.3" x2="175.3" y2="83.6" stroke-width=".7"/><line x1="190.6" y1="140.7" x2="181.4" y2="82.5" stroke-width=".7"/><line x1="193.7" y1="140.3" x2="187.6" y2="81.7" stroke-width=".7"/><line x1="196.9" y1="140.1" x2="193.8" y2="81.2" stroke-width=".7"/></g><circle cx="200.0" cy="11.0" r="7.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="198.1" cy="9.1" r="3.0" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="333.6" cy="66.4" r="7.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="331.8" cy="64.5" r="3.0" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="389.0" cy="200.0" r="7.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="387.1" cy="198.1" r="3.0" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="333.6" cy="333.6" r="7.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="331.8" cy="331.8" r="3.0" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="200.0" cy="389.0" r="7.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="198.1" cy="387.1" r="3.0" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="66.4" cy="333.6" r="7.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="64.5" cy="331.8" r="3.0" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="11.0" cy="200.0" r="7.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="9.1" cy="198.1" r="3.0" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="66.4" cy="66.4" r="7.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="64.5" cy="64.5" r="3.0" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="237.8" cy="59.0" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="236.7" cy="57.8" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="303.2" cy="96.8" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="302.1" cy="95.6" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="341.0" cy="162.2" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="339.9" cy="161.1" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="341.0" cy="237.8" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="339.9" cy="236.7" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="303.2" cy="303.2" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="302.1" cy="302.1" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="237.8" cy="341.0" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="236.7" cy="339.9" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="162.2" cy="341.0" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="161.1" cy="339.9" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="96.8" cy="303.2" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="95.6" cy="302.1" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="59.0" cy="237.8" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="57.8" cy="236.7" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="59.0" cy="162.2" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="57.8" cy="161.1" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="96.8" cy="96.8" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="95.6" cy="95.6" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="162.2" cy="59.0" r="4.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="161.1" cy="57.8" r="1.8" fill="none" stroke="#4e2e14" stroke-width="1.1"/><path d="M215.4 156.6 C204.3 130.1 237.9 120.6 222.3 90.2 C219.8 81.6 229.4 77.5 233.6 70.3 C233.1 95.1 245.3 119.9 216.8 130.0 C207.8 140.5 210.8 147.1 209.2 154.9Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M219.8 158.5 C246.4 147.6 229.4 117.0 261.8 106.6 C269.7 102.3 265.8 92.6 268.0 84.5 C250.8 102.4 224.6 111.3 237.6 138.6 C236.5 152.4 229.8 155.0 225.4 161.6Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M241.5 180.2 C252.4 153.6 283.0 170.6 293.4 138.2 C297.7 130.3 307.4 134.2 315.5 132.0 C297.6 149.2 288.7 175.4 261.4 162.4 C247.6 163.5 245.0 170.2 238.4 174.6Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M243.4 184.6 C269.9 195.7 279.4 162.1 309.8 177.7 C318.4 180.2 322.5 170.6 329.7 166.4 C304.9 166.9 280.1 154.7 270.0 183.2 C259.5 192.2 252.9 189.2 245.1 190.8Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M243.4 215.4 C269.9 204.3 279.4 237.9 309.8 222.3 C318.4 219.8 322.5 229.4 329.7 233.6 C304.9 233.1 280.1 245.3 270.0 216.8 C259.5 207.8 252.9 210.8 245.1 209.2Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M241.5 219.8 C252.4 246.4 283.0 229.4 293.4 261.8 C297.7 269.7 307.4 265.8 315.5 268.0 C297.6 250.8 288.7 224.6 261.4 237.6 C247.6 236.5 245.0 229.8 238.4 225.4Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M219.8 241.5 C246.4 252.4 229.4 283.0 261.8 293.4 C269.7 297.7 265.8 307.4 268.0 315.5 C250.8 297.6 224.6 288.7 237.6 261.4 C236.5 247.6 229.8 245.0 225.4 238.4Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M215.4 243.4 C204.3 269.9 237.9 279.4 222.3 309.8 C219.8 318.4 229.4 322.5 233.6 329.7 C233.1 304.9 245.3 280.1 216.8 270.0 C207.8 259.5 210.8 252.9 209.2 245.1Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M184.6 243.4 C195.7 269.9 162.1 279.4 177.7 309.8 C180.2 318.4 170.6 322.5 166.4 329.7 C166.9 304.9 154.7 280.1 183.2 270.0 C192.2 259.5 189.2 252.9 190.8 245.1Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M180.2 241.5 C153.6 252.4 170.6 283.0 138.2 293.4 C130.3 297.7 134.2 307.4 132.0 315.5 C149.2 297.6 175.4 288.7 162.4 261.4 C163.5 247.6 170.2 245.0 174.6 238.4Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M158.5 219.8 C147.6 246.4 117.0 229.4 106.6 261.8 C102.3 269.7 92.6 265.8 84.5 268.0 C102.4 250.8 111.3 224.6 138.6 237.6 C152.4 236.5 155.0 229.8 161.6 225.4Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M156.6 215.4 C130.1 204.3 120.6 237.9 90.2 222.3 C81.6 219.8 77.5 229.4 70.3 233.6 C95.1 233.1 119.9 245.3 130.0 216.8 C140.5 207.8 147.1 210.8 154.9 209.2Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M156.6 184.6 C130.1 195.7 120.6 162.1 90.2 177.7 C81.6 180.2 77.5 170.6 70.3 166.4 C95.1 166.9 119.9 154.7 130.0 183.2 C140.5 192.2 147.1 189.2 154.9 190.8Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M158.5 180.2 C147.6 153.6 117.0 170.6 106.6 138.2 C102.3 130.3 92.6 134.2 84.5 132.0 C102.4 149.2 111.3 175.4 138.6 162.4 C152.4 163.5 155.0 170.2 161.6 174.6Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M180.2 158.5 C153.6 147.6 170.6 117.0 138.2 106.6 C130.3 102.3 134.2 92.6 132.0 84.5 C149.2 102.4 175.4 111.3 162.4 138.6 C163.5 152.4 170.2 155.0 174.6 161.6Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M184.6 156.6 C195.7 130.1 162.1 120.6 177.7 90.2 C180.2 81.6 170.6 77.5 166.4 70.3 C166.9 95.1 154.7 119.9 183.2 130.0 C192.2 140.5 189.2 147.1 190.8 154.9Z" fill="url(#bh2)" stroke="#4e2e14" stroke-width="1.3"/><path d="M200.0 200.0 L200.0 170.0 L297.6 102.4Z" fill="url(#bh)" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L230.0 200.0 L297.6 102.4Z" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L230.0 200.0 L297.6 297.6Z" fill="url(#bh)" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L200.0 230.0 L297.6 297.6Z" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L200.0 230.0 L102.4 297.6Z" fill="url(#bh)" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L170.0 200.0 L102.4 297.6Z" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L170.0 200.0 L102.4 102.4Z" fill="url(#bh)" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L200.0 170.0 L102.4 102.4Z" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L173.1 173.1 L200.0 22.0Z" fill="url(#bh)" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L226.9 173.1 L200.0 22.0Z" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L226.9 173.1 L378.0 200.0Z" fill="url(#bh)" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L226.9 226.9 L378.0 200.0Z" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L226.9 226.9 L200.0 378.0Z" fill="url(#bh)" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L173.1 226.9 L200.0 378.0Z" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L173.1 226.9 L22.0 200.0Z" fill="url(#bh)" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 200.0 L173.1 173.1 L22.0 200.0Z" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.4"/><path d="M200.0 146.0 L254.0 200.0 L200.0 254.0 L146.0 200.0Z" fill="#e2c99b" stroke="#4e2e14" stroke-width="2.6"/><path d="M200.0 153.0 L247.0 200.0 L200.0 247.0 L153.0 200.0Z" fill="none" stroke="#4e2e14" stroke-width="1"/><circle cx="200.0" cy="146.0" r="6" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="198.5" cy="144.5" r="2.4" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="254.0" cy="200.0" r="6" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="252.5" cy="198.5" r="2.4" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="200.0" cy="254.0" r="6" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="198.5" cy="252.5" r="2.4" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="146.0" cy="200.0" r="6" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="144.5" cy="198.5" r="2.4" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="227.6" cy="172.4" r="4.2" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="226.5" cy="171.4" r="1.7" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="227.6" cy="227.6" r="4.2" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="226.5" cy="226.5" r="1.7" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="172.4" cy="227.6" r="4.2" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="171.4" cy="226.5" r="1.7" fill="none" stroke="#4e2e14" stroke-width="1.1"/><circle cx="172.4" cy="172.4" r="4.2" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.7"/><circle cx="171.4" cy="171.4" r="1.7" fill="none" stroke="#4e2e14" stroke-width="1.1"/><path d="M198.3 186.1 Q202.3 178.1 200.0 170.0 Q198.3 180.1 201.7 186.1Z" fill="#4e2e14"/><path d="M202.7 186.3 Q208.9 179.9 209.3 171.5 Q204.5 180.5 205.9 187.3Z" fill="#4e2e14"/><path d="M206.8 187.8 Q214.7 183.7 217.6 175.7 Q210.3 182.9 209.5 189.8Z" fill="#4e2e14"/><path d="M210.2 190.5 Q219.1 189.0 224.3 182.4 Q215.1 186.9 212.2 193.2Z" fill="#4e2e14"/><path d="M212.7 194.1 Q221.5 195.4 228.5 190.7 Q218.4 192.2 213.7 197.3Z" fill="#4e2e14"/><path d="M213.9 198.3 Q221.9 202.3 230.0 200.0 Q219.9 198.3 213.9 201.7Z" fill="#4e2e14"/><path d="M213.7 202.7 Q220.1 208.9 228.5 209.3 Q219.5 204.5 212.7 205.9Z" fill="#4e2e14"/><path d="M212.2 206.8 Q216.3 214.7 224.3 217.6 Q217.1 210.3 210.2 209.5Z" fill="#4e2e14"/><path d="M209.5 210.2 Q211.0 219.1 217.6 224.3 Q213.1 215.1 206.8 212.2Z" fill="#4e2e14"/><path d="M205.9 212.7 Q204.6 221.5 209.3 228.5 Q207.8 218.4 202.7 213.7Z" fill="#4e2e14"/><path d="M201.7 213.9 Q197.7 221.9 200.0 230.0 Q201.7 219.9 198.3 213.9Z" fill="#4e2e14"/><path d="M197.3 213.7 Q191.1 220.1 190.7 228.5 Q195.5 219.5 194.1 212.7Z" fill="#4e2e14"/><path d="M193.2 212.2 Q185.3 216.3 182.4 224.3 Q189.7 217.1 190.5 210.2Z" fill="#4e2e14"/><path d="M189.8 209.5 Q180.9 211.0 175.7 217.6 Q184.9 213.1 187.8 206.8Z" fill="#4e2e14"/><path d="M187.3 205.9 Q178.5 204.6 171.5 209.3 Q181.6 207.8 186.3 202.7Z" fill="#4e2e14"/><path d="M186.1 201.7 Q178.1 197.7 170.0 200.0 Q180.1 201.7 186.1 198.3Z" fill="#4e2e14"/><path d="M186.3 197.3 Q179.9 191.1 171.5 190.7 Q180.5 195.5 187.3 194.1Z" fill="#4e2e14"/><path d="M187.8 193.2 Q183.7 185.3 175.7 182.4 Q182.9 189.7 189.8 190.5Z" fill="#4e2e14"/><path d="M190.5 189.8 Q189.0 180.9 182.4 175.7 Q186.9 184.9 193.2 187.8Z" fill="#4e2e14"/><path d="M194.1 187.3 Q195.4 178.5 190.7 171.5 Q192.2 181.6 197.3 186.3Z" fill="#4e2e14"/><circle cx="200" cy="200" r="14.5" fill="#e2c99b" stroke="#4e2e14" stroke-width="1.8"/><circle cx="200" cy="200" r="11" fill="none" stroke="#4e2e14" stroke-width=".9"/><circle cx="200" cy="200" r="8" fill="none" stroke="#4e2e14" stroke-width=".9"/><circle cx="200" cy="200" r="5" fill="none" stroke="#4e2e14" stroke-width=".9"/><circle cx="200" cy="200" r="2.5" fill="none" stroke="#4e2e14" stroke-width=".9"/></svg>
+    <div class="rodape">ESCRITO PELOS CRONISTAS DE ARTON</div>
+    <a class="faixa" href="#sumario">ABRIR O ATLAS</a>
+  </div>
+</section>
+
+<!-- ================= SUMÁRIO ================= -->
+<section class="pagina" id="sumario">
+  <div class="perg">
+    <svg class="canto tl"><use href="#canto"/></svg><svg class="canto tr"><use href="#canto"/></svg>
+    <svg class="canto bl"><use href="#canto"/></svg><svg class="canto br"><use href="#canto"/></svg>
+    <div class="cap-rotulo">Atlas do Reino de Noldem</div>
+    <h1 class="cap">Sumário</h1>
+    <div class="subtitulo">Escolha um capítulo e o livro abre direto nele</div>
+    <svg class="ornamento"><use href="#orn"/></svg>
+    <div class="sum-lista" id="sumario-lista"></div>
+    <div class="passos"><a href="#capa">← Capa</a><span class="sp"></span><a href="#cap1">Capítulo I →</a></div>
+  </div>
+</section>
+
+<!-- ================= CAP I ================= -->
+<section class="pagina" id="cap1">
+  <div class="perg">
+    <svg class="canto tl"><use href="#canto"/></svg><svg class="canto tr"><use href="#canto"/></svg>
+    <svg class="canto bl"><use href="#canto"/></svg><svg class="canto br"><use href="#canto"/></svg>
+    <div class="cap-rotulo">Capítulo I</div>
+    <h1 class="cap">A Origem de Noldem</h1>
+    <div class="subtitulo">De um nome dado a um garoto, nasceu a ideia de um reino</div>
+    <svg class="ornamento"><use href="#orn"/></svg>
+
+    <p class="capitular">Os reinos de Arton costumam nascer de linhagens antigas, de conquistas ou da vontade dos deuses. Noldem não nasceu de nenhuma dessas coisas. Seu nome não pertencia a uma família ancestral, nem a uma terra que já existia nos mapas. Antes de ser um reino, Noldem foi apenas um nome, dado a um garoto que não tinha nenhum.</p>
+
+    <h2><span class="rn">✦</span>Um nome recebido</h2>
+    <p>Foi um cavaleiro da <strong>Casa Elliot</strong> quem deu esse nome a Rey, o rapaz que a casa havia tirado das ruas. A partir daquele dia, ele passou a ser chamado de <strong>Sir Rey d'Noldem</strong>. Era um sobrenome, um título e uma identidade, coisas que aquele jovem nunca tinha tido antes.</p>
+    <p>Na época, ninguém imaginava que o nome iria muito além de quem o carregava. Com o tempo, porém, Noldem deixou de ser só a forma como Rey era chamado e passou a ser o nome de um sonho.</p>
+
+    <div class="caixa ouro">
+      <div class="tit">Nota do Cronista</div>
+      <p>Poucos reinos podem dizer que seu nome foi um presente. Noldem pode. Talvez por isso seus fundadores acreditem que o reino também deve ser um presente: um lugar dado a quem nunca teve um.</p>
+    </div>
+
+    <h2><span class="rn">✦</span>O que Noldem significa</h2>
+    <p>Para quem vive sob sua bandeira, Noldem é a promessa de que <strong>a origem de alguém não decide o seu valor</strong>. O reino foi pensado para acolher pessoas que o resto de Arton costuma deixar de lado, e para dar a elas a chance de começar de novo.</p>
+    <p>Essa ideia vem diretamente da vida de seu fundador. Rey sabe como é ser desprezado, não ter lugar e depender da bondade dos outros. Noldem é a sua resposta a tudo isso.</p>
+
+    <p class="destaque">“Noldem não é um reino construído para pertencer a uma linhagem.<br>É um reino construído para pertencer às pessoas.”</p>
+
+    <h2><span class="rn">✦</span>Os pilares do reino</h2>
+    <table>
+      <tr><th>Pilar</th><th>O que representa</th></tr>
+      <tr><td>Acolhimento</td><td>Todos podem encontrar um lar em Noldem</td></tr>
+      <tr><td>Igualdade de origem</td><td>Ninguém é inferior por onde nasceu ou pelo que é</td></tr>
+      <tr><td>Recomeço</td><td>Oportunidade para quem não teria lugar no mundo</td></tr>
+      <tr><td>Liderança do povo</td><td>A cada dez anos, os cidadãos escolhem seu regente</td></tr>
+    </table>
+
+    <h2><span class="rn">✦</span>A Lei dos Dez Anos</h2>
+    <p>A lei de Noldem é clara: a cada dez anos, o povo tem o direito de escolher um novo regente. Nenhum governante é dono do trono, e nenhuma família o herda por nascimento.</p>
+    <p>E ainda assim, desde a fundação, o trono nunca mudou de mãos. A lei existe, a escolha acontece, e <strong>o povo nunca quis trocar Rey</strong>. O garoto que um dia não tinha lugar no mundo é, por vontade dos próprios cidadãos, quem continua a guiá-los.</p>
+    <div class="caixa ouro">
+      <div class="tit">Nota do Cronista</div>
+      <p>Em outros reinos, um rei governa porque nasceu para isso. Em Noldem, Rey governa porque, a cada dez anos, o povo decide de novo que é ele quem deve governar.</p>
+    </div>
+
+    <div class="caixa pendente">
+      <div class="tit">Para completar juntas</div>
+      <ul>
+        <li>O nome “Noldem” tem algum significado (em alguma língua de Arton, ou uma palavra inventada pelo cavaleiro)?</li>
+        <li>Qual é o nome do cavaleiro da Casa Elliot que batizou o Rey?</li>
+      </ul>
+    </div>
+    <div class="passos"><a href="#sumario">← Sumário</a><span class="sp"></span><a href="#cap2">Capítulo II →</a></div>
+  </div>
+</section>
+
+<!-- ================= CAP II ================= -->
+<section class="pagina" id="cap2">
+  <div class="perg">
+    <svg class="canto tl"><use href="#canto"/></svg><svg class="canto tr"><use href="#canto"/></svg>
+    <svg class="canto bl"><use href="#canto"/></svg><svg class="canto br"><use href="#canto"/></svg>
+    <div class="cap-rotulo">Capítulo II</div>
+    <h1 class="cap">Rey d'Noldem</h1>
+    <div class="subtitulo">Aquele que nasceu para a grandeza</div>
+    <svg class="ornamento"><use href="#orn"/></svg>
+
+    <p class="capitular">Rey não nasceu nobre. Não nasceu destinado a comandar exércitos, possuir terras ou ser lembrado pela história. Antes de ser Sir Rey d'Noldem, antes de sonhar com um reino, ele era apenas um garoto tentando sobreviver nas ruas. E talvez seja justamente por isso que sua história importa tanto.</p>
+
+    <figure class="retrato">
+      <img src="img/rey.jpg" width="1400" height="788" alt="Retrato de Sir Rey d'Noldem em armadura negra e dourada">
+      <figcaption><b>Sir Rey d'Noldem</b> retratado já como cavaleiro</figcaption>
+    </figure>
+
+    <div class="caixa ouro">
+      <div class="tit">Como reconhecê-lo</div>
+      <dl class="ficha">
+        <dt>Raça</dt><dd>Hobgoblin</dd>
+        <dt>Pele</dt><dd>Amarela, a mesma cor que ele representa nas cores de Noldem</dd>
+        <dt>Orelhas</dt><dd>Longas e pontudas</dd>
+        <dt>Cabelo</dt><dd>Negro, curto e sempre desalinhado</dd>
+        <dt>Olhos</dt><dd>Castanhos, com um olhar calmo</dd>
+        <dt>Marca</dt><dd>Uma cicatriz atravessando a bochecha esquerda</dd>
+        <dt>Traje</dt><dd>Armadura negra com filigranas douradas e um manto escuro de pele, preso por uma corrente com broche de asas</dd>
+      </dl>
+      <p style="margin-top:8px">É curioso notar que Rey veste o preto, a cor de Tessa, sobre o amarelo de sua própria pele.</p>
+    </div>
+
+    <h2><span class="rn">I.</span>Um garoto sem lugar no mundo</h2>
+    <p>Rey passou a infância nas ruas, vivendo como mendigo. Sem família, sem riqueza e sem futuro, aprendeu cedo que o mundo não é gentil com quem não tem nada, e menos gentil ainda com um <strong>hobgoblin</strong> que não tem nada. Sofria com o desprezo de quem o via como inferior, e aprendeu a engolir muita coisa para continuar sobrevivendo.</p>
+    <p>Ele não tinha título, não tinha influência, e não tinha ninguém que garantisse que estaria seguro no dia seguinte. Até que seu destino mudou.</p>
+
+    <h2><span class="rn">II.</span>A Casa Elliot</h2>
+    <p>Rey foi encontrado na sarjeta por <strong>Louisa Elliot</strong>, que o acolheu como criado na <strong>Casa Elliot</strong>, uma família nobre de duendes que lhe deu um lugar para viver. Mas ele não foi adotado como filho: foi colocado a serviço da jovem mestra da casa, <strong>Tessa Elliot</strong>, e ficou conhecido como seu <em>servo número um</em>.</p>
+    <p>Para quem antes não tinha nem um teto, aquilo significava muito: uma cama, comida, roupas, segurança e um lugar para onde voltar. A hierarquia, porém, era clara. Tessa era a nobre, e Rey era o servo. Mesmo assim, foi nessa relação que ele encontrou algo que talvez nunca tivesse tido: alguém em torno de quem seu mundo passou a girar.</p>
+
+    <h2><span class="rn">III.</span>Um sentimento guardado</h2>
+    <p>Tessa não era apenas sua senhora. Rey se apaixonou por ela, em segredo. Ela era alguém que ele admirava, a quem servia, e que ocupava um espaço enorme em seu coração.</p>
+    <p>Mas Rey era Rey: um garoto das ruas, um servo, sem nome de família, riqueza ou prestígio. Aos próprios olhos, dificilmente poderia imaginar estar ao lado de uma nobre. Nunca disse o que sentia, mas esse sentimento passou a fazer parte de quem ele era.</p>
+    <p class="destaque">Talvez ele não soubesse como ser amado.<br>Mas sabia como permanecer ao lado dela.</p>
+
+    <h2><span class="rn">IV.</span>O início da aventura</h2>
+    <p>Tudo começou a mudar quando Tessa convenceu os pais a investir no treinamento de Rey, para que ele pudesse acompanhá-la numa jornada pelo mundo. E Rey foi junto. Não porque fosse um grande aventureiro, nem um guerreiro experiente, e muito menos porque estivesse pronto para os perigos de Arton. <strong>Ele foi porque Tessa foi.</strong></p>
+    <p>Era o começo de uma jornada que o levaria a lutar, conhecer pessoas, participar de guerras e, aos poucos, descobrir que talvez fosse capaz de muito mais do que acreditava. Rey começou a aventura como servo. Mas o mundo não continuaria o mesmo.</p>
+
+    <h2><span class="rn">V.</span>A Guerra de Karst</h2>
+    <p>Rey e seus companheiros lutaram na <strong>Guerra de Karst</strong> e saíram da campanha com louvor. A guerra mudou a escala de sua vida: o garoto que antes só pensava em sobreviver agora fazia parte de conflitos muito maiores do que ele. Aprendeu o peso de lutar ao lado de outras pessoas, de confiar nos companheiros e de enfrentar perigos dos quais não dava para simplesmente fugir.</p>
+    <p>Depois de suas conquistas, o grupo seguiu para <strong>Valkaria</strong>, a capital do Reinado, em busca de uma audiência com a <strong>Rainha-Imperatriz Shivara</strong>. Queriam pedir a ajuda da rainha contra a invasão daqueles que hoje são conhecidos como os <strong>Puristas</strong>. O antigo mendigo, que um dia não era recebido nem na porta das casas, agora atravessava a maior cidade de Arton querendo falar com a governante do Reinado.</p>
+
+    <h2><span class="rn">VI.</span>O servo que começou a se tornar cavaleiro</h2>
+    <p>Conseguir uma audiência com a Rainha-Imperatriz não era simples, e a espera poderia ser longa demais. O grupo encontrou um atalho: vencer num <strong>torneio</strong> em Valkaria abriria as portas mais depressa. Foi ali que aconteceu uma das cenas que melhor representam Rey, numa arena, contra um velho cavaleiro montado. O adversário tinha espada e cavalo. Rey, a pé, segurava uma lança de madeira. Ele se preparou para atacar assim que o cavaleiro avançasse, e os dois investiram um contra o outro.</p>
+    <p>Ambos erraram, e a lança de Rey se partiu. Não foi uma vitória gloriosa nem um golpe perfeito. Foi um garoto que, mesmo sem saber direito o que estava fazendo, teve coragem de enfrentar um cavaleiro. Foi ali que Rey conquistou <strong>Duelo</strong>, o primeiro passo simbólico da sua transformação.</p>
+    <div class="caixa">
+      <div class="tit">Em jogo · Tormenta20</div>
+      <p>O confronto no torneio marca o momento em que Rey obteve o poder <strong>Duelo</strong>. Ainda não era o cavaleiro que imaginava ser, mas estava começando a se tornar um.</p>
+    </div>
+
+    <h2><span class="rn">VII.</span>Sir Rey d'Noldem</h2>
+    <p>Depois do torneio, um cavaleiro da Casa Elliot lhe deu o título, mas isso não transformou Rey em outra pessoa. Ele continuava inexperiente, ainda aprendendo o que significava proteger alguém, liderar e carregar responsabilidades.</p>
+    <p class="destaque">O título não fez de Rey um cavaleiro.<br>Ele precisaria merecê-lo.</p>
+
+    <p>Com o nome veio também uma posição: Rey se tornou um <strong>nobre menor</strong>. E a nobreza, ele logo descobriu, não é feita só de títulos e brasões, mas também de pilhas de papel.</p>
+    <p>Enquanto seus companheiros seguiam para a audiência com a Rainha-Imperatriz, Rey ficou para trás, <strong>preenchendo a papelada para retomar Karst</strong>. O garoto que um dia não tinha nada agora reivindicava terras, e o que foi dito diante de Shivara ele não chegou a ouvir.</p>
+    <div class="caixa ouro">
+      <div class="tit">Nota do Cronista</div>
+      <p>Há heróis que mudam o mundo com a espada. Rey, naquela semana, tentava mudá-lo com pena, tinta e muita paciência com os escribas do Reinado.</p>
+    </div>
+
+    <h2><span class="rn">VIII.</span>O sonho de Noldem</h2>
+    <p>Talvez o maior sonho de Rey não seja se tornar rei, e sim criar um lugar onde ninguém precise passar pelo que ele passou: um reino onde a origem não determine o destino, e onde goblins, hobgoblins, duendes, humanos, lefou e todos que não encontram espaço no resto de Arton possam viver sem ser tratados como inferiores.</p>
+    <p>Rey não quer construir um castelo para si. Quer construir um lar para quem nunca teve um. É aí que o garoto das ruas começa a se tornar algo maior do que um servo, um cavaleiro ou um nobre: <strong>o fundador de Noldem</strong>.</p>
+    <p>Ele conseguiu. Noldem nasceu, e com ela a Lei dos Dez Anos, que dá ao povo o direito de escolher um novo regente. Mas, a cada escolha, o povo devolve a coroa ao mesmo homem: <strong>Rey nunca foi trocado</strong>.</p>
+
+    <h2><span class="rn">IX.</span>Quem é Rey, afinal?</h2>
+    <table>
+      <tr><th>O que ele foi</th><th>O que está se tornando</th></tr>
+      <tr><td>Um mendigo</td><td>Um fundador</td></tr>
+      <tr><td>Um garoto sem lar</td><td>Alguém que quer criar um lar para todos</td></tr>
+      <tr><td>Um servo</td><td>Um líder</td></tr>
+      <tr><td>Alguém sem nome</td><td>Sir Rey d'Noldem</td></tr>
+      <tr><td>Um garoto que precisava de proteção</td><td>Um cavaleiro que pode proteger outros</td></tr>
+      <tr><td>Alguém sem poder</td><td>Alguém que sonha em mudar muitas vidas</td></tr>
+    </table>
+    <p>Mas ele nunca deixa de ser o garoto das ruas. Essa parte dele não desaparece com um título, e é justamente ela que o faz querer criar Noldem. No fundo, talvez ainda tenha medo de perder tudo o que conquistou.</p>
+
+    <svg class="ornamento"><use href="#orn"/></svg>
+    <p class="destaque">Rey é um garoto que recebeu um lugar no mundo e decidiu que, um dia, daria um lugar a todos que não possuem um.</p>
+
+    <div class="caixa pendente">
+      <div class="tit">Para completar juntas</div>
+      <ul>
+        <li>Classe do Rey na ficha, idade e arma preferida.</li>
+        <li>Quem era o velho cavaleiro do torneio?</li>
+        <li>Retomar Karst tem ligação com a fundação de Noldem? Noldem fica em Karst?</li>
+      </ul>
+    </div>
+    <div class="passos"><a href="#cap1">← Capítulo I</a><span class="sp"></span><a href="#cap3">Capítulo III →</a></div>
+  </div>
+</section>
+
+<!-- ================= CAP III ================= -->
+<section class="pagina" id="cap3">
+  <div class="perg">
+    <svg class="canto tl"><use href="#canto"/></svg><svg class="canto tr"><use href="#canto"/></svg>
+    <svg class="canto bl"><use href="#canto"/></svg><svg class="canto br"><use href="#canto"/></svg>
+    <div class="cap-rotulo">Capítulo III</div>
+    <h1 class="cap">Tessa Elliot</h1>
+    <div class="subtitulo">A jovem mestra da Casa Elliot</div>
+    <svg class="ornamento"><use href="#orn"/></svg>
+
+    <p class="capitular">Nenhuma crônica de Noldem estaria completa sem Tessa Elliot. Foi sob o teto de sua casa que Rey deixou de viver nas ruas, e foi a decisão dela de partir pelo mundo que colocou o futuro fundador do reino no caminho da aventura.</p>
+
+    <figure class="retrato quadrado">
+      <img src="img/tessa.jpg" width="736" height="736" alt="Esboços de Tessa Elliot como uma silhueta negra">
+      <figcaption><b>Tessa Elliot</b> em esboços de cronistas</figcaption>
+    </figure>
+
+    <div class="caixa">
+      <div class="tit">Como reconhecê-la</div>
+      <p>Tessa é uma <strong>duende</strong>, um dos seres feéricos de Arton. Nos esboços, aparece sempre <strong>inteiramente em negro</strong>, como uma sombra, e só os olhos brancos se destacam. E não é estilo de desenho: os Elliot são conhecidos em Pondsmânia como os <strong>Juízes das Sombras</strong>, justamente por essa aparência de silhueta. Não por acaso, o preto é a cor que a representa em Noldem.</p>
+      <dl class="ficha">
+        <dt>Raça</dt><dd>Duende</dd>
+        <dt>Idade</dt><dd>18 anos</dd>
+        <dt>Silhueta</dt><dd>Cabelo volumoso com orelhas ou laço no alto, tranças longas presas com laços</dd>
+        <dt>Traje</dt><dd>Vestido de saia rodada, botas e luvas</dd>
+        <dt>Armas</dt><dd>Uma espada, e há esboços dela fazendo “pew pew”</dd>
+        <dt>Detalhe</dt><dd>Uma xícara de chá, que ela parece apreciar bastante</dd>
+      </dl>
+    </div>
+
+    <h2><span class="rn">✦</span>O que os registros já contam</h2>
+    <p>Tessa <strong>nasceu nobre</strong>, como herdeira da <strong>Casa Elliot</strong>, e cresceu como a jovem mestra da casa. Diferente de Rey, nunca precisou conquistar um nome: o dela já era respeitado desde o berço. Quando a casa acolheu Rey, foi a ela que ele passou a servir, como seu servo número um. Mais tarde, Tessa pediu aos pais que <strong>investissem no treinamento de Rey</strong>, para transformá-lo no cavaleiro que a levaria além das paredes da mansão, e os dois partiram juntos por Arton.</p>
+    <p>Ela está no centro da história de Noldem e é apontada como sua <strong>futura rainha</strong>.</p>
+
+    <h2><span class="rn">✦</span>Uma nobre de verdade</h2>
+    <p>No fundo, Tessa é <strong>uma pessoa boa</strong>. Mas é também uma nobre criada como nobre, e carrega os preconceitos da sua classe: <strong>não gosta de pessoas pobres</strong>. Para ela, a pobreza tem algo de incômodo, quase de ofensivo.</p>
+    <p>A ironia não passa despercebida aos cronistas. A jovem que torce o nariz para os pobres tem, como servo mais leal, um hobgoblin que já foi mendigo, e está destinada a reinar sobre um reino criado justamente para acolher quem não tem nada.</p>
+
+    <h2><span class="rn">✦</span>Os tabus da duende</h2>
+    <p>Como todo duende de Arton, Tessa carrega tabus, marcas de sua natureza feérica das quais não consegue escapar. São dois, e nenhum deles ajuda sua fama.</p>
+    <p>O primeiro: ela <strong>nunca pode aceitar um elogio ou presente de um plebeu sem retribuir com um insulto cortante</strong> ou um pequeno ato de humilhação, como derrubar a bandeja de um garçom. O segundo: sempre que vê um aliado <strong>errar justamente naquilo em que é especialista</strong>, precisa debochar do erro em alto e bom tom, não importa a situação.</p>
+    <div class="caixa">
+      <div class="tit">Em jogo · Tormenta20</div>
+      <ul>
+        <li><strong>A Punição dos Plebeus:</strong> ao receber elogio ou presente de um plebeu, deve retribuir com um insulto ou uma pequena humilhação.</li>
+        <li><strong>A Perfeição Masoquista e a Falha Alheia:</strong> quando um aliado erra na própria especialidade, deve debochar em alto e bom tom.</li>
+      </ul>
+    </div>
+
+    <h2><span class="rn">✦</span>O que Tessa não sabe</h2>
+    <p>Rey nunca contou o que sente, e Tessa <strong>não sabe</strong>. Para ela, ele continua sendo seu servo número um, o mais leal de todos. Ela não imagina que o garoto que caminha ao seu lado por Arton faz isso por amor a ela.</p>
+    <p>Mas Tessa também guarda um segredo: em seus planos pessoais, <strong>Rey seria o aventureiro que levaria o nome dos Elliot à glória</strong>. Algo que ela nunca disse em voz alta.</p>
+
+    <h2><span class="rn">✦</span>A futura rainha</h2>
+    <p>Em Noldem, a coroa não passa de pai para filho, e o regente é quem o povo escolhe. Tessa, portanto, não será rainha por herança nem por eleição. Ela será rainha <strong>ao se casar com Rey</strong>.</p>
+    <p>Como esse dia vai chegar, nem os cronistas sabem dizer. Ainda falta Rey encontrar coragem para dizer o que guarda há tanto tempo, e falta Tessa descobrir o que sente pelo servo que sempre esteve ao seu lado. Esta página da história de Noldem ainda está sendo escrita.</p>
+    <p class="destaque">A nobre que nasceu com um nome<br>vai se casar com o garoto que recebeu um.</p>
+
+    <table>
+      <tr><th>O que os outros veem</th><th>O que há por baixo</th></tr>
+      <tr><td>Uma nobre que despreza os pobres</td><td>Uma pessoa boa, presa à forma como foi criada</td></tr>
+      <tr><td>Alguém que humilha quem lhe dá presentes</td><td>Uma natureza feérica que ela não escolheu</td></tr>
+      <tr><td>A senhora de um servo</td><td>A futura rainha de um reino de acolhimento</td></tr>
+    </table>
+
+    <div class="caixa pendente">
+      <div class="tit">Para completar juntas</div>
+      <ul>
+        <li>Qual a classe dela?</li>
+        <li>O que ela sente pelo Rey?</li>
+        <li>Quando você souber: como o Rey e a Tessa chegam ao casamento</li>
+      </ul>
+    </div>
+    <div class="passos"><a href="#cap2">← Capítulo II</a><span class="sp"></span><a href="#cap4">Capítulo IV →</a></div>
+  </div>
+</section>
+
+<!-- ================= CASA ELLIOT ================= -->
+<section class="pagina" id="elliot">
+  <div class="perg">
+    <svg class="canto tl"><use href="#canto"/></svg><svg class="canto tr"><use href="#canto"/></svg>
+    <svg class="canto bl"><use href="#canto"/></svg><svg class="canto br"><use href="#canto"/></svg>
+    <div class="cap-rotulo">Capítulo IV</div>
+    <h1 class="cap">A Casa Elliot</h1>
+    <div class="subtitulo">Os Juízes das Sombras</div>
+    <svg class="ornamento"><use href="#orn"/></svg>
+
+    <figure class="retrato silhueta brasao-elliot">
+      <img src="img/elliot-brasao.jpg" width="800" height="800" alt="Brasão da Casa Elliot: escudo com espada e estrela, coroa, silhuetas de duendes e a faixa Elliot">
+      <figcaption><b>Brasão da Casa Elliot</b></figcaption>
+    </figure>
+
+    <p class="capitular">A Família Elliot ascendeu à nobreza muito recentemente, pelo menos no Reinado. Em <strong>Pondsmânia</strong>, porém, eram grandes e respeitados: uma linhagem de duendes que se dedicava a manter as coisas em ordem no reino mais caótico de Arton.</p>
+
+    <h2><span class="rn">✦</span>Os Juízes das Sombras</h2>
+    <p>Por sua aparência de silhueta, os Elliot são conhecidos em sua terra natal como os <strong>Juízes das Sombras</strong>, e praticamente qualquer duende que veio do reino feérico já ouviu falar deles. Alguns de seus membros mais notórios deixaram a casa natal para servir em ordens de cavalaria, principalmente em <strong>Bielefeld</strong> e <strong>Valkaria</strong>.</p>
+    <p>Ainda assim, o nome Elliot nunca se destacou nos livros de história, seja pela aparência macabra da família, seja por serem duendes. James e Louisa Elliot, porém, tinham outros planos.</p>
+
+    <h2><span class="rn">✦</span>De Pondsmânia a Bielefeld</h2>
+    <p>O casal saiu de Pondsmânia e se mudou para Bielefeld, usando a influência que tinha na terra natal para estabelecer uma pequena presença na corte local. James tinha muito talento com as palavras, mas acabava mais intimidando as pessoas do que atraindo bons olhares para a família. Louisa, por sua vez, era ótima de conversa, mas tinha pouca paciência para os jogos da corte e costumava se ausentar antes de os encontros acabarem, deixando o marido sozinho, como uma figura assustadora.</p>
+    <p>As duas filhas pareciam muito determinadas a ajudar os pais na árdua tarefa de colocar o nome da família em foco, mas cada uma tinha uma ideia completamente diferente de como fazer isso.</p>
+
+    <h2><span class="rn">✦</span>Duas filhas, dois caminhos</h2>
+    <p><strong>Clarissa</strong>, a mais velha, decidiu conquistar a fama por conta própria. Usando a afinidade com a magia que sua raça possui, resolveu se tornar uma arcanista de batalha. Estudou em casa com um tutor até ter idade para ir à <strong>Academia Arcana</strong>, onde planejava fazer contatos e se estabelecer como uma grande arcanista. Conseguiu: tornou-se muito respeitada dentro da Academia. Mas isso não ajudou a reputação da família. Era vista como uma ótima arma contra grandes problemas, e nada além disso. Sentiu na pele o que seus parentes cavaleiros sentiam.</p>
+    <p><strong>Tessa</strong> tinha outros planos. Cresceu lendo livros e ouvindo histórias sobre aventureiros e os feitos que mudaram a história de Arton. Não era muito querida nos círculos da nobreza por causa de seus tabus, então evitava multidões e ficava na mansão, sempre acompanhada de <strong>Rey</strong>. Ele era a plateia de seus planos mirabolantes para conduzir um grupo de aventureiros à glória suprema.</p>
+    <p>Para isso, ela pediu aos pais que investissem no treinamento de Rey, porque tanto ela quanto eles só confiavam nele para acompanhá-la em sua suposta jornada. James e Louisa não imaginavam que aquilo fosse sair do papel, mas o pedido de uma jovem nobre <strong>mudou o destino da família para sempre</strong>.</p>
+
+    <table>
+      <tr><th>Membro</th><th>Idade</th><th>Quem é</th></tr>
+      <tr><td>James Elliot</td><td>56 anos</td><td>O patriarca de aparência intimidadora</td></tr>
+      <tr><td>Louisa Elliot</td><td>52 anos</td><td>A matriarca encantadora que odeia a corte</td></tr>
+      <tr><td>Clarissa Elliot</td><td>25 anos</td><td>A arcanista que renegou a herança</td></tr>
+      <tr><td>Tessa Elliot</td><td>18 anos</td><td>A herdeira que sonha com aventuras</td></tr>
+    </table>
+
+    <h2><span class="rn">I.</span>James Elliot</h2>
+    <figure class="retrato silhueta">
+      <img src="img/elliot-james.png" width="650" height="900" alt="James Elliot, silhueta negra de terno com contornos vermelhos">
+      <figcaption><b>James Elliot</b> 56 anos</figcaption>
+    </figure>
+    <p>Um nobre de postura naturalmente intimidadora, mas extremamente diplomático. Odeia conflitos diretos e prefere ficar calado quando acha que não tem nada de positivo a dizer. Só os mais próximos sabem como ele realmente é, porque sua aparência e seus olhos marcantes afastam as pessoas.</p>
+    <p>É muito amoroso com as filhas e a esposa, e mima quem gosta sempre que tem oportunidade. Embora tenha muita dificuldade de demonstrar, com os anos passou a ter muito apreço por Rey. Viu muito potencial no jovem cavaleiro que acompanhava sua filha, e por isso deixou os dois partirem juntos, confiante de que ele a protegeria com a própria vida.</p>
+    <div class="caixa">
+      <div class="tit">Tabus</div>
+      <ul>
+        <li><strong>Mãos Ocultas:</strong> nunca pode mostrar as palmas das mãos em público. Mantém as mãos sempre atrás das costas ou dentro de luvas, porque acredita que, se alguém vir as linhas de suas mãos, descobrirá seus segredos sentimentais.</li>
+        <li><strong>O Sorriso Proibido:</strong> só pode sorrir quando está completamente sozinho ou no escuro. Na frente dos outros, o rosto fica travado numa expressão severa e ameaçadora, mesmo quando ele está radiante de alegria.</li>
+      </ul>
+    </div>
+
+    <h2><span class="rn">II.</span>Louisa Elliot</h2>
+    <figure class="retrato silhueta">
+      <img src="img/elliot-louisa.jpg" width="700" height="768" alt="Esboços de Louisa Elliot, silhueta negra de vestido vermelho e chapéu">
+      <figcaption><b>Louisa Elliot</b> 52 anos</figcaption>
+    </figure>
+    <p>Uma nobre extremamente bem articulada, com um charme natural que faz todos gostarem dela à primeira vista. Mesmo assim, não gosta de formalidades e odeia os assuntos da corte. Prefere se isolar na mansão ou andar a cavalo pela propriedade. Ainda assim, está sempre presente quando a família vai a esses eventos, para apoiá-la, mesmo sendo fisicamente incapaz de ficar até o fim.</p>
+    <p>Não entende por que é tão popular, mesmo se esforçando para manter essas pessoas longe de si e perto do marido, o verdadeiro diplomata da família. Normalmente só tem paciência para as filhas e os criados da casa. Foi ela quem <strong>encontrou Rey na sarjeta</strong> e o acolheu como criado.</p>
+    <div class="caixa">
+      <div class="tit">Tabus</div>
+      <ul>
+        <li><strong>O Voto da Verdade Fútil:</strong> sempre que um aristocrata lhe faz uma pergunta sobre política, fofocas da corte ou negócios, ela é forçada a responder com uma curiosidade completamente inútil e detalhada sobre a anatomia ou os hábitos intestinais de seus cavalos.</li>
+        <li><strong>A Hora da Cinderela Aristocrática:</strong> em qualquer evento social, assim que o anfitrião dá o primeiro gole na bebida, Louisa precisa anunciar em voz alta: “Infelizmente, minha carruagem vai virar uma abóbora em cinco minutos”, e sair andando de costas até a saída mais próxima.</li>
+      </ul>
+    </div>
+
+    <h2><span class="rn">III.</span>Clarissa Elliot</h2>
+    <figure class="retrato silhueta">
+      <img src="img/elliot-clarissa.png" width="506" height="900" alt="Clarissa Elliot, silhueta negra de terno cinza e gravata vermelha">
+      <figcaption><b>Clarissa Elliot</b> 25 anos</figcaption>
+    </figure>
+    <p>Uma arcanista talentosa desde cedo, que usou seu sangue feérico para se tornar uma grande feiticeira. Nunca gostou das cortes nem de estar perto da nobreza. Por isso, mesmo sendo a filha mais velha, <strong>renegou sua herança em favor da irmã mais nova</strong>, Tessa.</p>
+    <p>Isso não a fez desistir de espalhar o nome da família por Arton. Só a tornou mais independente do título do que os nobres gostariam, e as cortes, obviamente, não viam isso com bons olhos. De personalidade forte, ela se divertia provocando Rey, fazendo pedidos difíceis ou colocando a irmã em supostas situações de perigo só para vê-lo salvá-la. Hoje vive como andarilha, resolvendo problemas por Arton em nome da Academia Arcana.</p>
+    <div class="caixa">
+      <div class="tit">Tabus</div>
+      <ul>
+        <li><strong>O Contrato do Pedido Absurdo:</strong> nunca pode aceitar um pedido de ajuda simples ou direto. Sempre exige que a pessoa lhe traga primeiro um item completamente inútil, como “a sombra de um gato branco” ou “três gotas de suor de um cavaleiro assustado”.</li>
+        <li><strong>Proibição de Títulos:</strong> jamais pode chamar um nobre pelo título, como “Conde”, “Barão” ou “Vossa Alteza”. Se alguém insistir, Clarissa precisa inventar na hora um nome ridículo de criatura mágica para a pessoa e só se dirigir a ela assim.</li>
+      </ul>
+    </div>
+
+    <h2><span class="rn">IV.</span>Tessa Elliot</h2>
+    <figure class="retrato silhueta">
+      <img src="img/elliot-tessa.png" width="635" height="900" alt="Tessa Elliot, silhueta negra de cabelo volumoso e olhos brancos">
+      <figcaption><b>Tessa Elliot</b> 18 anos</figcaption>
+    </figure>
+    <p>Uma jovem nobre cheia de ideais, que cresceu ouvindo histórias sobre heróis e sempre admirou os aventureiros como forças capazes de mudar o rumo de reinos inteiros. Nunca se deu bem com as outras crianças da nobreza, por ser duende, nem com as crianças mais pobres, por causa de seus tabus. Ficou muito sozinha, e foi isso que levou a mãe a designar um servo pessoal para ela. Houve vários testes até que Rey ocupasse essa posição.</p>
+    <p>Tessa gostava de como o jovem era obediente e parecia muito leal, sempre resistindo às provocações de Clarissa. Pegou muito apreço por ele e fez um acordo com os pais para transformá-lo num <strong>cavaleiro de armadura brilhante</strong>, capaz de levá-la além das paredes da mansão. Quando surgiu a chance de sair de casa, sabia que podia contar com Rey para protegê-la.</p>
+    <p>O que ela nunca contou a ele é que, em seus planos pessoais, <strong>Rey seria o aventureiro que levaria o nome da família à glória</strong>. Algo que ela, claramente, nunca disse em voz alta.</p>
+    <div class="caixa">
+      <div class="tit">Tabus</div>
+      <ul>
+        <li><strong>A Punição dos Plebeus:</strong> nunca pode aceitar um elogio ou presente de um plebeu sem retribuir com um insulto cortante ou um pequeno ato de humilhação, como derrubar a bandeja de um garçom.</li>
+        <li><strong>A Perfeição Masoquista e a Falha Alheia:</strong> sempre que vê um aliado ou companheiro de jornada errar na própria área de especialidade (um inimigo resistir à magia de um mago, um guerreiro errar um ataque), ela precisa debochar do erro em alto e bom tom e se fazer ouvir, não importa a situação.</li>
+      </ul>
+    </div>
+
+    <svg class="ornamento"><use href="#orn"/></svg>
+    <p class="destaque">De Pondsmânia ao Reinado, os Juízes das Sombras<br>sempre buscaram um lugar na história.<br>Foi um garoto das ruas quem o encontrou para eles.</p>
+  </div>
+</section>
+
+<section class="pagina" id="cap5">
+  <div class="perg">
+    <svg class="canto tl"><use href="#canto"/></svg><svg class="canto tr"><use href="#canto"/></svg>
+    <svg class="canto bl"><use href="#canto"/></svg><svg class="canto br"><use href="#canto"/></svg>
+    <div class="cap-rotulo">Capítulo VI</div>
+    <h1 class="cap">Os Símbolos de Noldem</h1>
+    <div class="subtitulo">Brasão, bandeira, cores, lema e juramento</div>
+    <svg class="ornamento"><use href="#orn"/></svg>
+
+    <p class="capitular">Todo reino de Arton se reconhece por suas cores. As de Noldem não foram escolhidas por tradição nem herdadas de uma dinastia: cada uma delas representa uma parte da história que deu origem ao reino.</p>
+
+    <h2><span class="rn">✦</span>As três cores</h2>
+    <div class="cores">
+      <div class="cor preto"><div class="amostra"></div><div class="nome">Preto</div><div class="quem">Tessa Elliot</div><p>A cor da jovem mestra da Casa Elliot, sob cujo teto Rey encontrou abrigo e por quem a jornada começou.</p></div>
+      <div class="cor amarelo"><div class="amostra"></div><div class="nome">Amarelo</div><div class="quem">Rey d'Noldem</div><p>A cor do garoto das ruas que recebeu um nome e decidiu dar um lugar a quem não tem um.</p></div>
+      <div class="cor branco"><div class="amostra"></div><div class="nome">Branco</div><div class="quem">O Povo</div><p>O branco não tem uma cor definida, porque o povo de Noldem pode ser da cor que quiser. É o espaço livre de cada cidadão para escrever a própria história.</p></div>
+    </div>
+
+    <div class="caixa ouro">
+      <div class="tit">Nota do Cronista</div>
+      <p>Diz-se em Noldem que o branco é a cor mais importante das três: Tessa e Rey abriram o caminho, mas é o povo que dá ao reino todas as cores que ele ainda vai ter.</p>
+    </div>
+
+    <h2><span class="rn">✦</span>O Brasão: a Coroa dos Dez</h2>
+    <div class="brasao">
+      <svg viewBox="0 0 200 230" aria-label="Brasão de Noldem: coroa branca cercada por dez pontos dourados sobre escudo negro">
+        <path d="M14 10 H186 V110 Q186 182 100 220 Q14 182 14 110 Z" fill="#141414" stroke="#f2c230" stroke-width="5"/>
+        <path d="M26 22 H174 V110 Q174 172 100 206 Q26 172 26 110 Z" fill="none" stroke="#ffffff" stroke-width="1.2" opacity=".55"/>
+        <polygon points="66,124 134,124 137,86 118,102 100,76 82,102 63,86" fill="#ffffff"/>
+        <rect x="66" y="124" width="68" height="9" fill="#ffffff"/>
+        <g fill="#f2c230">
+          <circle cx="100" cy="42" r="6"/><circle cx="133.5" cy="52.9" r="6"/><circle cx="154.2" cy="81.4" r="6"/><circle cx="154.2" cy="116.6" r="6"/><circle cx="133.5" cy="145.1" r="6"/>
+          <circle cx="100" cy="156" r="6"/><circle cx="66.5" cy="145.1" r="6"/><circle cx="45.8" cy="116.6" r="6"/><circle cx="45.8" cy="81.4" r="6"/><circle cx="66.5" cy="52.9" r="6"/>
+        </g>
+      </svg>
+      <div>
+        <p class="capitular">O brasão de Noldem não mostra animais ferozes, armas nem as cores de uma família antiga. Mostra uma <strong>coroa branca</strong>, a cor do povo, porque em Noldem a coroa pertence a quem a concede, e não a quem a usa.</p>
+        <dl class="ficha">
+          <dt>Campo</dt><dd>Negro, a cor de Tessa</dd>
+          <dt>Coroa</dt><dd>Branca, a cor do povo, que é quem decide quem a usa</dd>
+          <dt>Dez pontos</dt><dd>Amarelos, a cor de Rey, um para cada ano até a próxima escolha</dd>
+          <dt>Bordadura</dt><dd>Amarela, protegendo o escudo</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="caixa ouro">
+      <div class="tit">Nota do Cronista</div>
+      <p>Os dez pontos formam um círculo que nunca se fecha num único dono: completado o décimo, a escolha volta ao povo. Até hoje, a coroa sempre voltou para as mãos de Rey.</p>
+    </div>
+
+    <h2><span class="rn">✦</span>O Lema</h2>
+    <div class="lema">
+      <div class="lema-txt">“Um lugar para quem não tem lugar.”</div>
+      <div class="lema-sub">Lema do Reino de Noldem</div>
+    </div>
+    <p>O lema resume em poucas palavras o que Noldem promete a quem cruza suas fronteiras. Também conta, sem dizer o nome, a história de seu fundador: um garoto que não tinha lugar no mundo, recebeu um, e decidiu dar o mesmo a todos os outros.</p>
+
+    <div class="caixa pendente">
+      <div class="tit">Para completar juntas</div>
+      <ul>
+        <li>Bandeira (pode usar o brasão ou só as três cores)</li>
+        <li>Juramento dos cavaleiros de Noldem</li>
+      </ul>
+    </div>
+    <div class="passos"><a href="#cap4">← Capítulo IV</a><span class="sp"></span><a href="#cap6">Capítulo VI →</a></div>
+  </div>
+</section>
+
+<!-- Capítulos ainda vazios são gerados pelo script -->
+</main>
+
+<script>
+const caps = [
+  {id:'capa', n:'', t:'Capa'},
+  {id:'sumario', n:'', t:'Sumário'},
+  {id:'cap1', n:'I',    t:'A Origem de Noldem', ok:true},
+  {id:'cap2', n:'II',   t:'Rey d’Noldem', ok:true},
+  {id:'cap3', n:'III',  t:'Tessa Elliot', ok:'parcial'},
+  {id:'elliot', n:'IV', t:'A Casa Elliot', ok:true},
+  {id:'cap4', n:'V',   t:'O Nascimento do Reino', sub:'Fundação, organização, primeiros habitantes e alianças',
+     pede:['Onde e como o reino foi fundado','Quem foram os primeiros habitantes','Alianças com outros reinos de Arton']},
+  {id:'cap5', n:'VI',    t:'Os Símbolos de Noldem', ok:'parcial', sub:'Brasão, bandeira, cores, lema e juramento',
+     pede:['Brasão e bandeira (se ainda não existir, eu proponho opções)','Lema do reino','Juramento dos cavaleiros de Noldem']},
+  {id:'cap6', n:'VII',   t:'Terras de Noldem', sub:'Geografia, cidades, vilas e fronteiras',
+     pede:['Onde Noldem fica em Arton e com quais reinos faz fronteira','Cidades, vilas e lugares importantes','Clima, paisagem e recursos naturais']},
+  {id:'cap7', n:'VIII',  t:'Povos e Habitantes', sub:'Quem encontra abrigo em Noldem',
+     pede:['Já sabemos: goblins, hobgoblins, duendes, humanos, lefou e povos marginalizados. Há outros?','Como é o dia a dia, a cultura e as festas do reino']},
+  {id:'cap8', n:'IX', t:'Defesa e Forças de Noldem', sub:'Cavaleiros, guardas, aliados e inimigos',
+     pede:['Existe uma ordem de cavaleiros de Noldem?','Quem defende o reino e quais são seus inimigos']},
+  {id:'cap9', n:'X',   t:'História e Conflitos', sub:'As jornadas de Rey e Tessa',
+     linha:true,
+     pede:['Outras aventuras, lugares e inimigos derrotados','A ordem em que tudo aconteceu']},
+];
+
+const main = document.getElementById('conteudo');
+const canto = '<svg class="canto tl"><use href="#canto"/></svg><svg class="canto tr"><use href="#canto"/></svg><svg class="canto bl"><use href="#canto"/></svg><svg class="canto br"><use href="#canto"/></svg>';
+
+caps.forEach((c,i)=>{
+  if(document.getElementById(c.id)) return;
+  const prev = caps[i-1], next = caps[i+1];
+  let corpo = '';
+  if(c.linha){
+    corpo = `
+    <p class="capitular">Estes são os acontecimentos que os cronistas já conseguiram reunir sobre a jornada que levou ao nascimento de Noldem. A crônica continua sendo escrita.</p>
+    <div class="tempo">
+      <div class="marco"><div class="t">Os anos nas ruas</div><p>Rey sobrevive como mendigo, sem família nem nome.</p></div>
+      <div class="marco"><div class="t">O acolhimento pela Casa Elliot</div><p>Louisa Elliot encontra Rey na sarjeta e o acolhe como criado. Depois de vários testes, ele se torna o servo pessoal de Tessa.</p></div>
+      <div class="marco"><div class="t">A partida</div><p>Tessa convence os pais a investir no treinamento de Rey como cavaleiro, e os dois partem juntos para se aventurar pelo mundo.</p></div>
+      <div class="marco"><div class="t">A Guerra de Karst</div><p>O grupo luta na guerra e sai dela com louvor.</p></div>
+      <div class="marco"><div class="t">A caminho de Valkaria</div><p>O grupo vai à capital do Reinado pedir a ajuda da Rainha-Imperatriz Shivara contra a invasão dos Puristas.</p></div>
+      <div class="marco"><div class="t">O torneio em Valkaria</div><p>Para conseguir a audiência mais depressa, o grupo entra num torneio. A pé e com uma lança de madeira, Rey enfrenta um velho cavaleiro montado. A lança se parte, mas Rey conquista Duelo.</p></div>
+      <div class="marco"><div class="t">O nome Noldem</div><p>Depois do torneio, um cavaleiro da Casa Elliot o chama de Sir Rey d'Noldem.</p></div>
+      <div class="marco"><div class="t">Nobre menor</div><p>Rey se torna um nobre menor. Enquanto o grupo vai à audiência com Shivara, ele fica preenchendo a papelada para retomar Karst.</p></div>
+      <div class="marco"><div class="t">O sonho de um reino</div><p>Rey começa a sonhar com Noldem, um lar para quem nunca teve um.</p></div>
+      <div class="marco"><div class="t">A fundação de Noldem</div><p>O reino nasce, com a Lei dos Dez Anos. A cada escolha, o povo mantém Rey como regente.</p></div>
+    </div>`;
+  } else {
+    corpo = `<div class="vazio-box">
+      <svg class="selo" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#141414" stroke="#f2c230" stroke-width="3"/><circle cx="50" cy="50" r="34" fill="none" stroke="#f2c230" stroke-width="1.4" stroke-dasharray="3 3"/><text x="50" y="62" text-anchor="middle" font-family="Cinzel Decorative" font-size="34" fill="#f2c230">N</text></svg>
+      <p><em>Esta página do atlas ainda está selada, à espera dos registros dos cronistas.</em></p></div>`;
+  }
+  const pend = c.pede ? `<div class="caixa pendente"><div class="tit">Para completar juntas</div><ul>${c.pede.map(x=>`<li>${x}</li>`).join('')}</ul></div>` : '';
+  const sec = document.createElement('section');
+  sec.className='pagina'; sec.id=c.id;
+  sec.innerHTML = `<div class="perg">${canto}
+    <div class="cap-rotulo">Capítulo ${c.n}</div>
+    <h1 class="cap">${c.t}</h1>
+    <div class="subtitulo">${c.sub||''}</div>
+    <svg class="ornamento"><use href="#orn"/></svg>
+    ${corpo}${pend}
+    <div class="passos">${prev?`<a href="#${prev.id}">← ${prev.n?'Capítulo '+prev.n:prev.t}</a>`:''}<span class="sp"></span>${next?`<a href="#${next.id}">Capítulo ${next.n} →</a>`:`<a href="#capa">Voltar à capa ↺</a>`}</div>
+  </div>`;
+  main.appendChild(sec);
+});
+
+// ================= LIVRO: todas as folhas com o mesmo tamanho =================
+const btnSum=document.getElementById('btnSum');
+const setaEsq=document.getElementById('setaEsq'), setaDir=document.getElementById('setaDir');
+const reduz=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// sumário clicável (o número da página é preenchido depois da paginação)
+const lista=document.getElementById('sumario-lista');
+caps.forEach(c=>{
+  if(!c.n) return;
+  const st=c.ok===true?'':(c.ok==='parcial'||c.linha?'em escrita':'selado');
+  const sub=(document.querySelector('#'+c.id+' .subtitulo')||{}).textContent||'';
+  const a=document.createElement('a'); a.href='#'+c.id; if(st==='selado') a.className='selado';
+  a.innerHTML=`<span class="n">${c.n}</span><span class="t">${c.t}${sub?`<small>${sub}</small>`:''}</span><span class="lead"></span>${st?`<span class="st">${st}</span>`:''}<span class="pg" data-cap="${c.id}"></span>`;
+  lista.appendChild(a);
+});
+
+// guarda os capítulos originais; as folhas são montadas a partir deles
+const originais=caps.map(c=>{const s=document.getElementById(c.id); const cl=s.cloneNode(true); s.remove(); return {c, sec:cl};});
+let paginas=[], atual=null, geracao=0, cur=null;
+
+function medidas(){
+  const vw=document.documentElement.clientWidth, vh=window.innerHeight;
+  const movel=vw<=920;
+  let w=Math.min(760, vw-24), h;
+  if(movel){ h=Math.max(480, Math.min(vh-150, Math.round(w*1.9))); }
+  else { h=Math.max(480, Math.min(vh-112, Math.round(w*1.38))); w=Math.min(w, Math.round(h*1116/1409)); }   // folha em formato de livro, perto da proporção da capa
+  document.documentElement.style.setProperty('--w',w+'px');
+  document.documentElement.style.setProperty('--h',h+'px');
+  return w+'x'+h;
+}
+const caber=()=>cur.corpo.scrollHeight<=cur.corpo.clientHeight+1;
+const ehTitulo=el=>el && (el.tagName==='H1'||el.tagName==='H2'||el.matches('.cap-rotulo,.subtitulo,.ornamento'));
+const TEXTO=el=>/^(P|LI|DD)$/.test(el.tagName);
+const DIVIS=el=>/^(UL|OL|DL|TABLE|TBODY)$/.test(el.tagName) || el.matches('.caixa,.tempo,.sum-lista,.vazio-box,.cores,.brasao') || (el.tagName==='DIV' && !el.className);
+
+function novaPag(o,n){
+  const sec=document.createElement('section'); sec.className='pagina';
+  sec.id = n===1 ? o.c.id : o.c.id+'-'+n;
+  const perg=document.createElement('div'); perg.className=o.sec.querySelector('.perg').className;
+  perg.innerHTML=canto+(n>1&&o.c.n?`<div class="cabeco">Capítulo ${o.c.n} · ${o.c.t}</div>`:'')+'<div class="corpo"></div><div class="folio"></div>';
+  if(o.c.id==='capa' && false){const cs=getComputedStyle(document.documentElement); perg.insertAdjacentHTML('afterbegin',`<div class="moldura-capa">${molduraCapa(parseFloat(cs.getPropertyValue('--w')),parseFloat(cs.getPropertyValue('--h')))}</div>`);}
+  sec.appendChild(perg); main.appendChild(sec);
+  cur={sec, corpo:perg.querySelector('.corpo')};
+  paginas.push({id:sec.id, cap:o.c.id, el:sec});
+}
+function pecas(node){
+  const out=[];
+  node.childNodes.forEach(c=>{
+    if(c.nodeType===3) c.textContent.split(/(\s+)/).forEach(t=>{if(t) out.push(document.createTextNode(t));});
+    else out.push(c.cloneNode(true));
+  });
+  return out;
+}
+function dividirTexto(node,parent){
+  const ps=pecas(node); if(ps.length<8) return null;
+  const a=node.cloneNode(false); parent.appendChild(a);
+  const fill=k=>a.replaceChildren(...ps.slice(0,k).map(p=>p.cloneNode(true)));
+  let lo=0, hi=ps.length-1;
+  while(lo<hi){const m=(lo+hi+1)>>1; fill(m); if(caber()) lo=m; else hi=m-1;}
+  if(lo<6){a.remove(); return null;}
+  fill(lo); a.classList.add('quebra');
+  const b=node.cloneNode(false); b.classList.remove('capitular'); b.classList.add('cont');
+  const resto=ps.slice(lo); while(resto.length && resto[0].nodeType===3 && !resto[0].textContent.trim()) resto.shift();
+  b.append(...resto);
+  return b;
+}
+// coloca no fim de "parent" a maior parte de "node" que couber; devolve o que sobrou
+function dividir(node,parent){
+  if(node.nodeType!==1) return null;
+  if(TEXTO(node)) return dividirTexto(node,parent);
+  if(node.tagName==='TABLE'){   // tabela: divide por linhas e repete o cabeçalho na continuação
+    const rows=[...node.querySelectorAll('tr')], head=rows[0]&&rows[0].querySelector('th')?rows[0]:null, body=head?rows.slice(1):rows;
+    const mk=list=>{const t=node.cloneNode(false), tb=document.createElement('tbody'); if(head) tb.appendChild(head.cloneNode(true)); list.forEach(r=>tb.appendChild(r.cloneNode(true))); t.appendChild(tb); return t;};
+    let k=0;
+    for(let n=1;n<body.length;n++){const c=mk(body.slice(0,n)); parent.appendChild(c); const ok=caber(); c.remove(); if(ok) k=n; else break;}
+    if(k<1) return null;
+    parent.appendChild(mk(body.slice(0,k)));
+    const r=mk(body.slice(k)); r.classList.add('cont'); return r;
+  }
+  if(!DIVIS(node)) return null;
+  const first=node.cloneNode(false); parent.appendChild(first);
+  const kids=[...node.childNodes]; let i=0, resto=null;
+  for(;i<kids.length;i++){
+    const k=kids[i]; first.appendChild(k);
+    if(caber()) continue;
+    first.removeChild(k);
+    if(k.nodeType===1){const r=dividir(k,first); if(r){resto=r; i++;}}
+    break;
+  }
+  if(i>=kids.length && !resto) return true;
+  let util=[...first.children].filter(e=>!e.matches('.tit')).length;
+  if(!util){first.remove(); kids.forEach(k=>node.appendChild(k)); return null;}
+  const rest=node.cloneNode(false); rest.classList.add('cont');
+  if(resto) rest.appendChild(resto);
+  kids.slice(i).forEach(k=>rest.appendChild(k));
+  if(node.tagName==='TABLE'){
+    const tr=first.querySelector('tr'), tb=rest.querySelector('tbody');
+    if(tr && tr.querySelector('th') && tb) tb.insertBefore(tr.cloneNode(true), tb.firstChild);
+  }
+  return rest;
+}
+function paginar(){
+  medidas();
+  main.querySelectorAll('.pagina,.folha').forEach(e=>e.remove());
+  paginas=[];
+  originais.forEach(o=>{
+    const src=o.sec.cloneNode(true);
+    const fila=[...src.querySelector('.perg').children].filter(e=>!e.matches('.canto,.passos,.folio'));
+    let n=1; novaPag(o,n);
+    cur.sec.classList.add('ativa');           // precisa estar visível para medir
+    while(fila.length){
+      const node=fila.shift();
+      cur.corpo.appendChild(node);
+      if(caber()) continue;
+      node.remove();
+      const r=dividir(node,cur.corpo);
+      if(r===true) continue;
+      if(r){cur.sec.classList.remove('ativa'); novaPag(o,++n); cur.sec.classList.add('ativa'); fila.unshift(r); continue;}
+      if(!cur.corpo.children.length){cur.corpo.appendChild(node); continue;}
+      const levar=[];
+      // leva os títulos soltos junto, mas só uma vez (senão um bloco grande espalha os títulos uma página por vez)
+      if(!node._levouTitulos) while(cur.corpo.children.length>1 && ehTitulo(cur.corpo.lastElementChild)){const e=cur.corpo.lastElementChild; e.remove(); levar.unshift(e);}
+      node._levouTitulos=true;
+      cur.sec.classList.remove('ativa'); novaPag(o,++n); cur.sec.classList.add('ativa');
+      levar.forEach(e=>cur.corpo.appendChild(e)); fila.unshift(node);
+    }
+    cur.sec.classList.remove('ativa');
+  });
+  paginas.forEach((p,i)=>{p.el.querySelector('.folio').textContent = i ? `— ${i} —` : '';});
+  document.querySelectorAll('.sum-lista .pg').forEach(s=>{s.textContent=paginas.findIndex(p=>p.cap===s.dataset.cap);});
+  atual=null; mostrar(); marcarJanela(); if(typeof ajustarTela==='function') ajustarTela();
+}
+
+// ---------- navegação ----------
+const idx=id=>paginas.findIndex(p=>p.id===id);
+function resolver(){
+  let id=(location.hash||'#capa').slice(1);
+  if(idx(id)<0){const p=paginas.find(p=>p.cap===id.split('-')[0]); id=p?p.id:'capa';}
+  return id;
+}
+function ir(delta){const i=idx(atual)+delta; if(i>=0 && i<paginas.length) location.hash='#'+paginas[i].id;}
+setaEsq.onclick=()=>ir(-1); setaDir.onclick=()=>ir(1);
+document.addEventListener('keydown',e=>{
+  if(e.target.closest('input,textarea')) return;
+  if(e.key==='ArrowRight') ir(1); else if(e.key==='ArrowLeft') ir(-1);
+});
+let tx=0,ty=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(document.body.classList.contains('caneta-on')) return;
+  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>70 && Math.abs(dx)>Math.abs(dy)*1.6) ir(dx<0?1:-1);
+},{passive:true});
+
+function criarFolha(tipo,atraso,z){
+  const f=document.createElement('div');
+  f.className='folha '+tipo; f.style.zIndex=z; f.style.animationDelay=atraso+'ms';
+  main.appendChild(f);
+}
+function mostrar(){
+  if(!paginas.length) return;
+  const id=resolver(), i=idx(id), pag=paginas[i];
+  btnSum.classList.toggle('oculto', pag.cap==='capa'); if(pag.cap==='capa') abrirJanela(false);
+  setaEsq.disabled=i===0; setaDir.disabled=i===paginas.length-1;
+  setaDir.title=setaDir.ariaLabel = i===0 ? 'Abrir o livro' : 'Virar a página';
+
+  const g=++geracao;
+  const limpar=alvo=>{
+    main.querySelectorAll('.folha').forEach(f=>f.remove());
+    paginas.forEach(p=>{p.el.classList.remove('virando','sai','entra','sombreada'); p.el.style.animationDelay=''; p.el.classList.toggle('ativa',p.id===alvo);});
+  };
+  limpar(atual);
+  const ant=atual, iAnt=ant?idx(ant):-1, velho=iAnt>=0?paginas[iAnt].el:null, novo=pag.el;
+  atual=id;
+  window.scrollTo({top:0,behavior:'instant'});
+  if(!velho || velho===novo || reduz){limpar(id); return;}
+
+  const fim=()=>{if(g===geracao) limpar(id);};
+  const salto=Math.min(Math.abs(i-iAnt)-1, 8), passo=110;
+  if(i>iAnt){
+    // a folha atual vira para a esquerda; se pulou capítulos, outras folhas passam junto
+    velho.classList.remove('ativa'); novo.classList.add('ativa','sombreada');
+    velho.classList.add('virando','sai');
+    for(let k=0;k<salto;k++) criarFolha('sai',150+k*passo,25-k);
+    setTimeout(fim, Math.max(850, salto?150+(salto-1)*passo+600:0)+60);
+  } else {
+    for(let k=0;k<salto;k++) criarFolha('entra',k*passo,10+k);
+    const atraso=salto?salto*passo+60:0;
+    novo.style.animationDelay=atraso+'ms';
+    novo.classList.add('virando','entra');
+    setTimeout(fim, atraso+910);
+  }
+}
+window.addEventListener('hashchange',mostrar);
+
+// espera fontes e imagens para medir certo
+const srcs=[...new Set(originais.flatMap(o=>[...o.sec.querySelectorAll('img')].map(i=>i.getAttribute('src'))))];
+// mostra o livro rápido: não espera as fotos (o tamanho delas já está no HTML) e espera as fontes no máximo 1,2 s
+let paginado=false;
+const comecar=()=>{ if(!paginado){ paginado=true; paginar(); } };
+setTimeout(comecar,1200);
+(document.fonts?document.fonts.ready:Promise.resolve()).then(()=>{ if(paginado) paginar(); else comecar(); });
+let tamanho=null, tRes;
+window.addEventListener('resize',()=>{clearTimeout(tRes); tRes=setTimeout(()=>{const ant=tamanho; tamanho=medidas(); if(ant && ant!==tamanho) paginar();},250);});
+tamanho=medidas();
+
+// ================= JANELINHA DO SUMÁRIO (móvel e redimensionável) =================
+const jan=document.createElement('div');
+jan.className='janela fechada'; jan.setAttribute('role','dialog'); jan.setAttribute('aria-label','Sumário');
+jan.innerHTML=`<div class="barra"><span class="pega">⋮⋮</span><span class="tt">Sumário</span><button class="fechar" aria-label="Fechar">✕</button></div><div class="itens"></div>`;
+document.body.appendChild(jan);
+const itensJan=jan.querySelector('.itens');
+itensJan.innerHTML=caps.filter(c=>c.id!=='capa').map((c,k)=>{
+  const sel=c.n && !c.ok && !c.linha;
+  return `<a href="#${c.id}" data-cap="${c.id}"${sel?' class="selado"':''}><span class="n">${c.n||k+1}</span><span>${c.n?c.t:'Sumário'}</span><span class="pg"></span></a>`;
+}).join('');
+function abrirJanela(abrir){jan.classList.toggle('fechada',!abrir); btnSum.classList.toggle('aberto',abrir);}
+btnSum.addEventListener('click',e=>{e.preventDefault(); abrirJanela(jan.classList.contains('fechada'));});
+jan.querySelector('.fechar').onclick=()=>abrirJanela(false);
+function marcarJanela(){
+  const capAtual=atual?(paginas[idx(atual)]||{}).cap:null;
+  itensJan.querySelectorAll('a').forEach(a=>{
+    a.classList.toggle('atual',a.dataset.cap===capAtual);
+    const n=paginas.findIndex(p=>p.cap===a.dataset.cap); a.querySelector('.pg').textContent=n>0?n:'';
+  });
+}
+window.addEventListener('hashchange',marcarJanela);
+// arrastar pela barra
+(()=>{
+  const barra=jan.querySelector('.barra'); let dx=0,dy=0,arr=false;
+  barra.addEventListener('pointerdown',e=>{
+    if(e.target.closest('.fechar')) return;
+    arr=true; const r=jan.getBoundingClientRect(); dx=e.clientX-r.left; dy=e.clientY-r.top; barra.setPointerCapture(e.pointerId);
+  });
+  barra.addEventListener('pointermove',e=>{
+    if(!arr) return;
+    const w=jan.offsetWidth, h=jan.offsetHeight;
+    jan.style.left=Math.min(Math.max(0,e.clientX-dx), innerWidth-w)+'px';
+    jan.style.top=Math.min(Math.max(0,e.clientY-dy), innerHeight-40)+'px';
+  });
+  barra.addEventListener('pointerup',()=>arr=false);
+  barra.addEventListener('pointercancel',()=>arr=false);
+})();
+
+
+// ================= GRAVURAS NO FUNDO =================
+(()=>{
+  const g=document.createElement('div'); g.className='gravuras'; g.setAttribute('aria-hidden','true');
+  const raios=Array.from({length:32},(_,k)=>{const a=k*Math.PI/16, r1=k%2?60:40, r2=k%2?150:200;
+    return `<line x1="${(Math.cos(a)*r1).toFixed(1)}" y1="${(Math.sin(a)*r1).toFixed(1)}" x2="${(Math.cos(a)*r2).toFixed(1)}" y2="${(Math.sin(a)*r2).toFixed(1)}"/>`}).join('');
+  const penas=Array.from({length:9},(_,k)=>`<path d="M0 0 Q ${60+k*22} ${-30-k*8} ${120+k*30} ${-10+k*20}"/>`).join('');
+  g.innerHTML=`<svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <pattern id="hach" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="7" stroke="#0b0b0b" stroke-width="1.6"/></pattern>
+    <pattern id="hachV" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)"><line x1="0" y1="0" x2="0" y2="6" stroke="#9e1218" stroke-width="1.4"/></pattern>
+  </defs>
+  <!-- rosa dos ventos escarlate (esquerda) -->
+  <g transform="translate(170 300)" stroke="#9e1218" stroke-width="1.4" fill="none">
+    <circle r="210"/><circle r="200" stroke-dasharray="2 6"/><circle r="70"/>${raios}
+    <path d="M0 -230 L22 -22 L230 0 L22 22 L0 230 L-22 22 L-230 0 L-22 -22Z" fill="url(#hachV)"/>
+    <circle r="16" fill="#9e1218"/>
+  </g>
+  <!-- espadas cruzadas (esquerda, embaixo) -->
+  <g transform="translate(230 760) rotate(-35)" fill="#0b0b0b" stroke="#0b0b0b">
+    <rect x="-6" y="-200" width="12" height="300" fill="url(#hach)" stroke-width="1.5"/><path d="M-6 -200 L0 -230 L6 -200Z"/>
+    <rect x="-50" y="100" width="100" height="12" rx="4"/><rect x="-5" y="112" width="10" height="56"/><circle cy="178" r="12"/>
+  </g>
+  <g transform="translate(230 760) rotate(35)" fill="#0b0b0b" stroke="#0b0b0b">
+    <rect x="-6" y="-200" width="12" height="300" fill="url(#hach)" stroke-width="1.5"/><path d="M-6 -200 L0 -230 L6 -200Z"/>
+    <rect x="-50" y="100" width="100" height="12" rx="4"/><rect x="-5" y="112" width="10" height="56"/><circle cy="178" r="12"/>
+  </g>
+  <!-- coroa com louros (direita, em cima) -->
+  <g transform="translate(1420 240)">
+    <path d="M-110 60 L-120 -40 L-60 10 L0 -70 L60 10 L120 -40 L110 60Z" fill="url(#hach)" stroke="#0b0b0b" stroke-width="3"/>
+    <rect x="-112" y="60" width="224" height="26" fill="#0b0b0b"/>
+    <circle cx="-120" cy="-48" r="10" fill="#9e1218"/><circle cx="0" cy="-80" r="12" fill="#9e1218"/><circle cx="120" cy="-48" r="10" fill="#9e1218"/>
+    <g fill="none" stroke="#9e1218" stroke-width="2">
+      <path d="M-150 150 Q -200 60 -150 -40"/><path d="M150 150 Q 200 60 150 -40"/>
+      ${[0,1,2,3,4].map(k=>`<ellipse cx="${-172+k*2}" cy="${120-k*36}" rx="9" ry="20" transform="rotate(${-40+k*8} ${-172+k*2} ${120-k*36})" fill="url(#hachV)"/><ellipse cx="${172-k*2}" cy="${120-k*36}" rx="9" ry="20" transform="rotate(${40-k*8} ${172-k*2} ${120-k*36})" fill="url(#hachV)"/>`).join('')}
+    </g>
+  </g>
+  <!-- asa heráldica (direita, embaixo) -->
+  <g transform="translate(1330 720) scale(1.1)" fill="none" stroke="#0b0b0b" stroke-width="2.2">${penas}
+    <path d="M0 0 Q 140 -120 330 -60 Q 260 40 0 0Z" fill="url(#hach)"/>
+  </g>
+  <!-- filigranas nos cantos -->
+  <g fill="none" stroke="#9e1218" stroke-width="1.6">
+    <path d="M20 40 Q 140 40 160 120 Q 175 190 110 185 Q 70 180 85 140"/><path d="M1580 960 Q 1460 960 1440 880 Q 1425 810 1490 815 Q 1530 820 1515 860"/>
+    <path d="M1580 40 Q 1470 50 1450 120 Q 1440 170 1490 165"/><path d="M20 960 Q 130 950 150 880 Q 160 830 110 835"/>
+  </g>
+</svg>`;
+  document.body.prepend(g);
+})();
+
+// ================= PENA DE TINTEIRO, BORRACHA E CADERNO =================
+const guardar=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const ler=(k,d)=>{try{const v=localStorage.getItem(k); return v?JSON.parse(v):d}catch(e){return d}};
+const ICO_PENA=`<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M29 3c-7 1-13 5-16 12l-2 6 3-1c7-2 12-8 15-17z" fill="currentColor" fill-opacity=".25"/>
+  <path d="M29 3 13 20"/><path d="M19 9l3 1M16 13l3 1M22 6l2 .5"/>
+  <path d="M5 21h10l-1.2 7.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3z" fill="currentColor" fill-opacity=".35"/><path d="M4 21h12"/></svg>`;
+const ICO_CADERNO=`<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7 4h17a2 2 0 0 1 2 2v20a2 2 0 0 1-2 2H7z" fill="currentColor" fill-opacity=".25"/><path d="M7 4a3 3 0 0 0-3 3v18a3 3 0 0 0 3 3"/>
+  <path d="M7 4v24"/><path d="M12 10h9M12 14h9M12 18h6"/><path d="M26 13h3v6h-3"/><circle cx="16.5" cy="23" r="1.4" fill="currentColor"/></svg>`;
+const ICO_BORRACHA=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M14 4l6 6-9 9H6l-3-3z"/><path d="M9 9l6 6"/><path d="M11 19h9"/></svg>`;
+const ICO_DESFAZER=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>`;
+const ICO_LIMPAR=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>`;
+
+const ferr=document.createElement('div'); ferr.className='ferramentas';
+ferr.innerHTML=`<button class="ico" id="btnPena" title="Pena de tinteiro (escrever na página)" aria-label="Pena de tinteiro">${ICO_PENA}</button>
+<div class="paleta" id="paleta" hidden>
+  <button class="cor sel" data-cor="#1c1c1c" title="Tinta preta"><i style="background:#1c1c1c"></i></button>
+  <button class="cor" data-cor="#a4161a" title="Tinta escarlate"><i style="background:#a4161a"></i></button>
+  <button class="cor" data-cor="#b8860b" title="Tinta dourada"><i style="background:#b8860b"></i></button>
+  <span class="sep"></span>
+  <button class="esp" data-esp="2" title="Traço fino"><i style="width:5px;height:5px"></i></button>
+  <button class="esp sel" data-esp="3.5" title="Traço médio"><i style="width:9px;height:9px"></i></button>
+  <button class="esp" data-esp="6" title="Traço grosso"><i style="width:13px;height:13px"></i></button>
+  <span class="sep"></span>
+  <button id="btnBorracha" title="Borracha">${ICO_BORRACHA}</button>
+  <button id="btnDesfazer" title="Desfazer o último traço">${ICO_DESFAZER}</button>
+  <button id="btnLimpar" title="Apagar tudo desta página">${ICO_LIMPAR}</button>
+</div>
+<button class="ico" id="btnCaderno" title="Caderno de anotações" aria-label="Caderno de anotações">${ICO_CADERNO}</button>`;
+document.body.appendChild(ferr);
+
+const tela=document.createElement('canvas'); tela.className='tela-anot'; main.appendChild(tela);
+const ctx=tela.getContext('2d');
+const ponto=document.createElement('div'); ponto.className='ponto'; document.body.appendChild(ponto);
+let anot=ler('noldem-anotacoes',{}), cor='#1c1c1c', esp=3.5, apagando=false, traco=null;
+
+function ajustarTela(){
+  const r=main.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  tela.width=Math.round(r.width*dpr); tela.height=Math.round(r.height*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0); redesenhar();
+}
+function desenharTraco(t,W,H){
+  ctx.save();
+  ctx.globalCompositeOperation=t.apagar?'destination-out':'source-over';
+  ctx.strokeStyle=t.cor; ctx.lineCap='round'; ctx.lineJoin='round';
+  const p=t.pts;
+  if(p.length===1){ctx.fillStyle=t.cor; ctx.beginPath(); ctx.arc(p[0][0]*W,p[0][1]*H,t.esp*(0.4+p[0][2])*.6,0,7); ctx.fill();}
+  for(let k=1;k<p.length;k++){
+    ctx.lineWidth=t.apagar? t.esp*5 : t.esp*(0.35+p[k][2]*1.3);
+    ctx.beginPath(); ctx.moveTo(p[k-1][0]*W,p[k-1][1]*H); ctx.lineTo(p[k][0]*W,p[k][1]*H); ctx.stroke();
+  }
+  ctx.restore();
+}
+function redesenhar(){
+  const W=tela.clientWidth, H=tela.clientHeight; ctx.clearRect(0,0,W,H);
+  (anot[atual]||[]).forEach(t=>desenharTraco(t,W,H));
+}
+function salvarAnot(){guardar('noldem-anotacoes',anot);}
+// esconde a tinta enquanto a página vira e mostra a da nova página quando ela assenta
+function esperarVirada(){
+  tela.classList.add('oculta');
+  const chk=()=>{ if(main.querySelector('.virando,.folha')) requestAnimationFrame(chk); else {redesenhar(); tela.classList.remove('oculta');} };
+  requestAnimationFrame(chk);
+}
+window.addEventListener('hashchange',esperarVirada);
+
+const pos=e=>{const r=tela.getBoundingClientRect(); return [(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height, e.pointerType==='mouse'||!e.pressure?.5:e.pressure];};
+tela.addEventListener('pointerdown',e=>{
+  if(!document.body.classList.contains('caneta-on')) return;
+  e.preventDefault(); tela.setPointerCapture(e.pointerId);
+  const apagarAgora=apagando || e.button===5 || (e.buttons&32);   // botão de borracha da caneta
+  traco={cor, esp, apagar:!!apagarAgora, pts:[pos(e)]};
+  desenharTraco(traco,tela.clientWidth,tela.clientHeight);
+});
+tela.addEventListener('pointermove',e=>{
+  moverPonto(e);
+  if(!traco) return;
+  const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];
+  const W=tela.clientWidth,H=tela.clientHeight;
+  evs.forEach(ev=>{traco.pts.push(pos(ev)); desenharTraco({...traco,pts:traco.pts.slice(-2)},W,H);});
+});
+const fimTraco=()=>{ if(!traco) return; (anot[atual]=anot[atual]||[]).push(traco); traco=null; salvarAnot(); };
+tela.addEventListener('pointerup',fimTraco); tela.addEventListener('pointercancel',fimTraco);
+tela.addEventListener('pointerleave',()=>ponto.classList.remove('visivel'));
+function moverPonto(e){
+  const d=apagando? esp*5 : Math.max(6, esp*2.2);
+  ponto.style.width=ponto.style.height=d+'px';
+  ponto.style.background=apagando?'rgba(255,255,255,.35)':cor;
+  ponto.style.left=e.clientX+'px'; ponto.style.top=e.clientY+'px';
+  ponto.classList.add('visivel');
+}
+
+const btnPena=document.getElementById('btnPena'), paleta=document.getElementById('paleta'), btnBorracha=document.getElementById('btnBorracha');
+btnPena.onclick=()=>{
+  const on=!document.body.classList.contains('caneta-on');
+  document.body.classList.toggle('caneta-on',on); btnPena.classList.toggle('ligado',on); paleta.hidden=!on;
+  if(on) ajustarTela();
+};
+paleta.querySelectorAll('.cor').forEach(b=>b.onclick=()=>{cor=b.dataset.cor; apagando=false; btnBorracha.classList.remove('sel');
+  paleta.querySelectorAll('.cor').forEach(x=>x.classList.toggle('sel',x===b));});
+paleta.querySelectorAll('.esp').forEach(b=>b.onclick=()=>{esp=+b.dataset.esp; paleta.querySelectorAll('.esp').forEach(x=>x.classList.toggle('sel',x===b));});
+btnBorracha.onclick=()=>{apagando=!apagando; btnBorracha.classList.toggle('sel',apagando);};
+document.getElementById('btnDesfazer').onclick=()=>{ if(anot[atual]&&anot[atual].length){anot[atual].pop(); salvarAnot(); redesenhar();} };
+document.getElementById('btnLimpar').onclick=()=>{ if(anot[atual]&&anot[atual].length){anot[atual]=[]; salvarAnot(); redesenhar();} };
+window.addEventListener('resize',()=>setTimeout(ajustarTela,400));
+
+// ---------- caderno medieval ----------
+const cad=document.createElement('div'); cad.className='caderno fechada'; cad.setAttribute('role','dialog'); cad.setAttribute('aria-label','Caderno de anotações');
+cad.innerHTML=`<div class="barra"><span class="tt">Caderno do Cronista</span><button class="fechar" aria-label="Fechar">✕</button></div>
+<div class="folha-c"><textarea placeholder="Escreva aqui suas anotações..." spellcheck="false"></textarea></div>
+<div class="rodape-c">guardado neste navegador</div>`;
+document.body.appendChild(cad);
+const txt=cad.querySelector('textarea'); txt.value=ler('noldem-caderno','');
+let tTxt; txt.addEventListener('input',()=>{clearTimeout(tTxt); tTxt=setTimeout(()=>guardar('noldem-caderno',txt.value),300);});
+const btnCaderno=document.getElementById('btnCaderno');
+const abrirCaderno=on=>{cad.classList.toggle('fechada',!on); btnCaderno.classList.toggle('ligado',on); if(on) setTimeout(()=>txt.focus({preventScroll:true}),150);};
+btnCaderno.onclick=()=>abrirCaderno(cad.classList.contains('fechada'));
+cad.querySelector('.fechar').onclick=()=>abrirCaderno(false);
+(()=>{ const barra=cad.querySelector('.barra'); let dx=0,dy=0,arr=false;
+  barra.addEventListener('pointerdown',e=>{ if(e.target.closest('.fechar')) return; arr=true; const r=cad.getBoundingClientRect(); dx=e.clientX-r.left; dy=e.clientY-r.top; barra.setPointerCapture(e.pointerId);});
+  barra.addEventListener('pointermove',e=>{ if(!arr) return; cad.style.right='auto';
+    cad.style.left=Math.min(Math.max(0,e.clientX-dx), innerWidth-cad.offsetWidth)+'px'; cad.style.top=Math.min(Math.max(0,e.clientY-dy), innerHeight-40)+'px';});
+  barra.addEventListener('pointerup',()=>arr=false); barra.addEventListener('pointercancel',()=>arr=false);
+})();
+
+
+// ================= MOLDURA DOURADA DA CAPA (desenhada no tamanho exato da folha) =================
+function molduraCapa(W,H){
+  const cx=W/2, cy=H/2, rx=W*.37, ry=H*.405;
+  const canto=(x,y,sx,sy)=>`<use href="#canto-capa" transform="translate(${x} ${y}) scale(${sx} ${sy})"/>`;
+  const s=Math.min(1, W/700);
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">
+  <defs>
+    <filter id="relevo" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.4" result="b"/>
+      <feSpecularLighting in="b" surfaceScale="3.5" specularConstant=".95" specularExponent="16" lighting-color="#ffe0ad" result="s"><feDistantLight azimuth="225" elevation="42"/></feSpecularLighting>
+      <feComposite in="s" in2="SourceAlpha" operator="in" result="brilho"/>
+      <feOffset in="SourceAlpha" dx="1.4" dy="2" result="o"/><feGaussianBlur in="o" stdDeviation="1.3" result="ob"/>
+      <feFlood flood-color="#2e1806" flood-opacity=".6"/><feComposite in2="ob" operator="in" result="sombra"/>
+      <feMerge><feMergeNode in="sombra"/><feMergeNode in="SourceGraphic"/><feMergeNode in="brilho"/></feMerge>
+    </filter>
+    <filter id="pergaminho"><feTurbulence type="fractalNoise" baseFrequency=".02" numOctaves="4" seed="9" result="t"/><feColorMatrix in="t" values="0 0 0 0 .32  0 0 0 0 .2  0 0 0 0 .08  0 0 0 -1.7 1.15" result="m"/><feComposite in="m" in2="SourceGraphic" operator="atop"/></filter>
+    <radialGradient id="ovalFundo" cx="45%" cy="40%" r="65%"><stop offset="0" stop-color="#e2c99b"/><stop offset=".55" stop-color="#c8a571"/><stop offset=".85" stop-color="#a7804c"/><stop offset="1" stop-color="#7d5a30"/></radialGradient>
+    <g id="canto-capa" fill="#b4843f" stroke="#b4843f" stroke-linecap="round">
+      <path d="M14 160 C14 74 74 14 160 14" fill="none" stroke-width="5"/>
+      <path d="M160 14 c28 0 40 22 27 37 c-11 12 -28 4 -24 -9 c3 -9 13 -8 14 -1" fill="none" stroke-width="4"/>
+      <path d="M14 160 c0 28 22 40 37 27 c12 -11 4 -28 -9 -24 c-9 3 -8 13 -1 14" fill="none" stroke-width="4"/>
+      <path d="M42 42 C74 35 104 55 120 88 C88 88 61 70 42 42Z" stroke="none"/>
+      <path d="M42 42 C35 74 55 104 88 120 C88 88 70 61 42 42Z" stroke="none"/>
+      <path d="M48 46 Q84 58 110 84 M46 48 Q58 84 84 110" fill="none" stroke="#8a6008" stroke-width="1.6"/>
+      <path d="M104 32 q24 -9 44 5 q-22 11 -44 -5z" stroke="none"/><path d="M32 104 q-9 24 5 44 q11 -22 -5 -44z" stroke="none"/>
+      <path d="M118 60 q18 4 26 20 q-18 0 -26 -20z" stroke="none"/><path d="M60 118 q4 18 20 26 q0 -18 -20 -26z" stroke="none"/>
+      <circle cx="42" cy="42" r="11" stroke="none"/><circle cx="42" cy="42" r="5" fill="#8a6008" stroke="none"/>
+      <circle cx="138" cy="102" r="4" stroke="none"/><circle cx="102" cy="138" r="4" stroke="none"/><circle cx="160" cy="70" r="3" stroke="none"/><circle cx="70" cy="160" r="3" stroke="none"/>
+    </g>
+    <g id="ramo" fill="#b4843f" stroke="none">
+      <path d="M0 0 C-10 -20 -34 -26 -54 -18 C-38 -6 -18 -2 0 0Z"/><path d="M0 0 C10 -20 34 -26 54 -18 C38 -6 18 -2 0 0Z"/>
+      <path d="M0 0 C-6 -26 -2 -46 0 -56 C2 -46 6 -26 0 0Z"/>
+      <path d="M0 4 C-16 8 -30 20 -36 34 C-20 28 -8 18 0 4Z"/><path d="M0 4 C16 8 30 20 36 34 C20 28 8 18 0 4Z"/>
+      <circle cy="6" r="6"/><circle cx="-60" cy="-20" r="3.5"/><circle cx="60" cy="-20" r="3.5"/>
+    </g>
+  </defs>
+  <g filter="url(#relevo)">
+    <rect x="12" y="12" width="${W-24}" height="${H-24}" rx="6" fill="none" stroke="#b4843f" stroke-width="5"/>
+    <rect x="22" y="22" width="${W-44}" height="${H-44}" rx="4" fill="none" stroke="#b4843f" stroke-width="5" stroke-dasharray="0.1 10" stroke-linecap="round"/>
+    <rect x="32" y="32" width="${W-64}" height="${H-64}" rx="3" fill="none" stroke="#b4843f" stroke-width="2.2"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#ovalFundo)" filter="url(#pergaminho)"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx+4}" ry="${ry+4}" fill="none" stroke="#6b4320" stroke-width="12"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx+4}" ry="${ry+4}" fill="none" stroke="#b4843f" stroke-width="7"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx+12}" ry="${ry+12}" fill="none" stroke="#b4843f" stroke-width="4.5" stroke-dasharray="0.1 9" stroke-linecap="round"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx-11}" ry="${ry-11}" fill="none" stroke="#b4843f" stroke-width="1.8"/>
+    <g transform="scale(${s})">${canto(32/s,32/s,1,1)}</g>
+    <g transform="translate(${W} 0) scale(${-s} ${s})">${canto(32/s,32/s,1,1)}</g>
+    <g transform="translate(0 ${H}) scale(${s} ${-s})">${canto(32/s,32/s,1,1)}</g>
+    <g transform="translate(${W} ${H}) scale(${-s} ${-s})">${canto(32/s,32/s,1,1)}</g>
+    <use href="#ramo" transform="translate(${cx} ${cy-ry-30}) scale(${s*.9}) rotate(180)"/>
+    <use href="#ramo" transform="translate(${cx} ${cy+ry+30}) scale(${s*.9})"/>
+    <use href="#ramo" transform="translate(${cx-rx-26} ${cy}) scale(${s*.75}) rotate(90)"/>
+    <use href="#ramo" transform="translate(${cx+rx+26} ${cy}) scale(${s*.75}) rotate(-90)"/>
+  </g>
+  <ellipse cx="${cx}" cy="${cy}" rx="${rx-3}" ry="${ry-3}" fill="none" stroke="rgba(70,45,0,.35)" stroke-width="6" style="filter:blur(3px)"/>
+</svg>`;
+}
+
+</script>
+</body>
+</html>
